@@ -1,6 +1,0 @@
-There are 2 csv files containing the input data of Tol 1326-379 (new data from 2022)
-"new_Tol_values.csv" contains the data on the positions of the errorbars. i.e flux_errp = x, where x is the position of the top of the positive errorbar. 
-
-In contrast, "new_Tol_values_norm.csv", contains the data on the norm of the errorbars. 
-
-As of I am writing this I am not sure on how the input data should be, ,

@@ -1,5 +1,0 @@
-gamma_max,chi2,success
-4.4771e+00,154.3,True
-4.3771e+00,150.9,True
-4.5771e+00,156.9,True
-4.5271e+00,155.8,True
