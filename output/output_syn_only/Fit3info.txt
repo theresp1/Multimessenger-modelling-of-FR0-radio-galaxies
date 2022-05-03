@@ -1,0 +1,77 @@
+  u = 1 / 2 + np.exp(-tau) / tau - (1 - np.exp(-tau)) / np.power(tau, 2)
+/home/theresepaulsen/Documents/python_projects/test_folder/spectral_fitting/lib/python3.9/site-packages/agnpy/synchrotron/synchrotron.py:66: RuntimeWarning: invalid value encountered in true_divide
+  u = 1 / 2 + np.exp(-tau) / tau - (1 - np.exp(-tau)) / np.power(tau, 2)
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in negative or zero diagonal element in covariance matrix : i = 4
+Info in added to diagonal of Error matrix a value : dg = 23.1352
+Info in matrix forced pos-def by adding to diagonal : padd = 0.00400602
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 63.4092
+Info in Required Edm is : edmval = 0.0002
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 0.834585
+Info in negative or zero diagonal element in covariance matrix : i = 4
+Info in added to diagonal of Error matrix a value : dg = 0.507075
+Info: gdel = -59.2976
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in negative or zero diagonal element in covariance matrix : i = 4
+Info in added to diagonal of Error matrix a value : dg = 481.174
+Info in matrix forced pos-def by adding to diagonal : padd = 0.00304205
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 21.7794
+Info in Required Edm is : edmval = 0.0002
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 0.134272
+Info in negative or zero diagonal element in covariance matrix : i = 4
+Info in added to diagonal of Error matrix a value : dg = 0.500051
+Info: gdel = -1399.01
+/home/theresepaulsen/Documents/python_projects/test_folder/spectral_fitting/lib/python3.9/site-packages/agnpy/synchrotron/synchrotron.py:66: RuntimeWarning: invalid value encountered in true_divide
+  u = 1 / 2 + np.exp(-tau) / tau - (1 - np.exp(-tau)) / np.power(tau, 2)
+/home/theresepaulsen/Documents/python_projects/test_folder/spectral_fitting/lib/python3.9/site-packages/agnpy/synchrotron/synchrotron.py:67: RuntimeWarning: overflow encountered in true_divide
+  return np.where(tau < 1e-3, 1, 3 * u / tau)
+Info: MnHesse: maximum number of allowed function calls exhausted.
+Info: MnHesse fails and will return diagonal matrix 
+Info in MnHesse: 2nd derivative zero for Parameter  : name = par_003_log10_gamma_min
+Info: MnHesse fails and will return diagonal matrix 
+Info in MnHesse: 2nd derivative zero for Parameter  : name = par_003_log10_gamma_min
+Info: MnHesse fails and will return diagonal matrix 
+Info in MnHesse: 2nd derivative zero for Parameter  : name = par_003_log10_gamma_min
+Info: MnHesse fails and will return diagonal matrix 
+Info in MnHesse: 2nd derivative zero for Parameter  : name = par_003_log10_gamma_min
+Info: MnHesse fails and will return diagonal matrix 
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 13.57                      │       Nfcn = 1612 (1612 total)       │
+│ EDM = 2.68e-06 (Goal: 0.0002)    │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│INVALID Minimum│ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│ Hesse FAILED  │  Has Covariance  │APPROXIMATE│NOT pos. def.│ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : False
+        message    : Optimization failed.
+        nfev       : 1612
+        total stat : 13.57
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -7.4136e-01      -2.000e+01 1.000e+01  False       nan
+             p1  1.0000e+00       1.000e+00 3.000e+00  False       nan
+             p2  5.0000e+00      -2.000e+00 5.000e+00  False       nan
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  2.0000e+00       0.000e+00 4.000e+00  False       nan
+log10_gamma_max  4.5206e+00       4.000e+00 6.000e+00  False       nan
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  2.0000e+00       0.000e+00 1.500e+01   True 0.000e+00
+        log10_B -4.1186e-01      -3.000e+00 1.000e+00  False       nan
+          t_var  7.1249e+04    s  1.000e+01 3.142e+07  False       nan

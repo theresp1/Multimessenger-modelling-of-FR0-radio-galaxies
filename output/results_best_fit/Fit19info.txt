@@ -1,0 +1,108 @@
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 2.26054e+06
+Info in             requested : edmval = 0.0002
+Info in matrix forced pos-def by adding to diagonal : padd = 0.011061
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 207.254
+Info in Required Edm is : edmval = 0.0002
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 1227.89
+Info in negative or zero diagonal element in covariance matrix : i = 0
+Info in negative or zero diagonal element in covariance matrix : i = 1
+Info in negative or zero diagonal element in covariance matrix : i = 2
+Info in negative or zero diagonal element in covariance matrix : i = 5
+Info in added to diagonal of Error matrix a value : dg = 0.50432
+Info: gdel = -3.67843e+06
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 1058.79
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 34268.9
+Info in             requested : edmval = 0.0002
+Info in matrix forced pos-def by adding to diagonal : padd = 0.0513111
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 66.3542
+Info in Required Edm is : edmval = 0.0002
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 2970.35
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 6.02955e+06
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 3.92483
+Info in Required Edm is : edmval = 0.0002
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 0.826284
+Info in Required Edm is : edmval = 0.0002
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 0.826284
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 1.64452e+07
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 0.854245
+Info in Required Edm is : edmval = 0.0002
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 0.854245
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 843.517
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 0.854334
+Info in Required Edm is : edmval = 0.0002
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 0.854334
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 185.3                      │       Nfcn = 1625 (1625 total)       │
+│ EDM = 0.854 (Goal: 0.0002)       │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│INVALID Minimum│ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ ABOVE EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │ Accurate  │  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : False
+        message    : Optimization failed. Estimated distance to minimum too large.
+        nfev       : 1625
+        total stat : 185.30
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -6.4280e+00      -2.000e+01 1.000e+01  False 5.445e-02
+             p1  2.6109e+00       1.000e+00 3.000e+00  False 4.408e-02
+             p2  3.7136e+00      -2.000e+00 5.000e+00  False 4.589e-02
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  2.5481e+00       0.000e+00 4.000e+00  False 6.066e-02
+log10_gamma_max  4.7796e+00       4.000e+00 6.000e+00  False 7.822e-04
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  2.0000e+00       0.000e+00 1.500e+01   True 0.000e+00
+        log10_B -1.1683e+00      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  1.5878e+07    s  1.000e+01 3.142e+07  False 8.478e+05

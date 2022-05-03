@@ -1,0 +1,55 @@
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 478.252
+Info in             requested : edmval = 0.0002
+Info in negative or zero diagonal element in covariance matrix : i = 2
+Info in added to diagonal of Error matrix a value : dg = 68.0743
+Info in matrix forced pos-def by adding to diagonal : padd = 15.4315
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 76345.3
+Info in Required Edm is : edmval = 0.0002
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 818.2
+Info in negative or zero diagonal element in covariance matrix : i = 0
+Info in negative or zero diagonal element in covariance matrix : i = 1
+Info in negative or zero diagonal element in covariance matrix : i = 2
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in negative or zero diagonal element in covariance matrix : i = 5
+Info in added to diagonal of Error matrix a value : dg = 0.504521
+Info: gdel = -4.20891e+07
+Info: VariableMetricBuilder: call limit exceeded.
+Info: VariableMetricBuilder: FunctionMinimum is invalid, reached the function call limit
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 322.1                      │       Nfcn = 1282 (1282 total)       │
+│ EDM = 11.6 (Goal: 0.0002)        │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│INVALID Minimum│ Valid Parameters │       SOME Parameters at limit       │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           ABOVE call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │ Accurate  │  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : False
+        message    : Optimization failed. Call limit was reached.
+        nfev       : 1282
+        total stat : 322.10
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -5.3180e+00      -2.000e+01 1.000e+01  False 3.110e-02
+             p1  2.9997e+00       1.000e+00 3.000e+00  False 2.211e-03
+             p2  4.3233e+00      -2.000e+00 5.000e+00  False 7.097e-02
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  2.8277e+00       0.000e+00 4.000e+00  False 1.447e-03
+log10_gamma_max  6.0000e+00       4.000e+00 6.000e+00  False 2.097e-03
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  2.0000e+00       0.000e+00 1.500e+01   True 0.000e+00
+        log10_B -3.6826e-01      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  1.7599e+06    s  1.000e+01 3.142e+07  False 7.060e+04

@@ -1,0 +1,71 @@
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 2087.48
+Info in             requested : edmval = 0.0002
+Info in negative or zero diagonal element in covariance matrix : i = 1
+Info in added to diagonal of Error matrix a value : dg = 59.9765
+Info in matrix forced pos-def by adding to diagonal : padd = 7.84114
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 155119
+Info in Required Edm is : edmval = 0.0002
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 135.957
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in added to diagonal of Error matrix a value : dg = 0.500017
+Info: gdel = -1.78695e+07
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 0.687485
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 57474.3
+Info in             requested : edmval = 0.0002
+Info in matrix forced pos-def by adding to diagonal : padd = 0.0786938
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 622.811
+Info in Required Edm is : edmval = 0.0002
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 0.0735533
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 0.587826
+Info in Required Edm is : edmval = 0.0002
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 533.7                      │       Nfcn = 1010 (1010 total)       │
+│ EDM = 7.2e-05 (Goal: 0.0002)     │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│ Valid Minimum │ Valid Parameters │       SOME Parameters at limit       │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │ Accurate  │  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : True
+        message    : Optimization terminated successfully.
+        nfev       : 1010
+        total stat : 533.70
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -5.0790e+00      -2.000e+01 1.000e+01  False 4.843e-02
+             p1  3.0000e+00       1.000e+00 3.000e+00  False 2.081e-04
+             p2  5.0000e+00      -2.000e+00 5.000e+00  False 3.381e-05
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  1.6915e+00       0.000e+00 4.000e+00  False 4.833e-03
+log10_gamma_max  4.0005e+00       4.000e+00 6.000e+00  False 2.126e-03
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  2.0000e+00       0.000e+00 1.500e+01   True 0.000e+00
+        log10_B  5.3174e-01      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  2.7156e+05    s  1.000e+01 3.142e+07  False 1.232e+04

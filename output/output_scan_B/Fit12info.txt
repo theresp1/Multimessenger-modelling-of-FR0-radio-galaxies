@@ -1,0 +1,84 @@
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 5146.06
+Info in negative or zero diagonal element in covariance matrix : i = 0
+Info in negative or zero diagonal element in covariance matrix : i = 2
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in negative or zero diagonal element in covariance matrix : i = 5
+Info in added to diagonal of Error matrix a value : dg = 0.500376
+Info: gdel = -5.95599e+08
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 0.00999867
+Info in             requested : edmval = 0.0002
+Info in VariableMetricBuilder: INVALID function minimum - edm is above tolerance, : edm = 0.00996533
+Info in VariableMetricBuilder: Required tolerance  is 10 x edmval  : edmval = 0.0002
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 12.4408
+Info in             requested : edmval = 0.0002
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in added to diagonal of Error matrix a value : dg = 51.0781
+Info in matrix forced pos-def by adding to diagonal : padd = 3.52062
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 482.617
+Info in Required Edm is : edmval = 0.0002
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 1.74382
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in added to diagonal of Error matrix a value : dg = 0.515283
+Info: gdel = -197262
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in added to diagonal of Error matrix a value : dg = 18.6961
+Info in matrix forced pos-def by adding to diagonal : padd = 8.71478
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 2393.71
+Info in Required Edm is : edmval = 0.0002
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 1.66891
+Info in negative or zero diagonal element in covariance matrix : i = 1
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in added to diagonal of Error matrix a value : dg = 0.519693
+Info: gdel = -3.31393e+06
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 4131.84
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 212.7                      │       Nfcn = 1664 (1664 total)       │
+│ EDM = 5.72e-05 (Goal: 0.0002)    │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│ Valid Minimum │ Valid Parameters │       SOME Parameters at limit       │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │ Accurate  │  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : True
+        message    : Optimization terminated successfully.
+        nfev       : 1664
+        total stat : 212.68
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -5.7740e+00      -2.000e+01 1.000e+01  False 3.355e-02
+             p1  2.3746e+00       1.000e+00 3.000e+00  False 2.046e-02
+             p2  4.2104e+00      -2.000e+00 5.000e+00  False 3.865e-02
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  1.8588e+00       0.000e+00 4.000e+00  False 3.218e-03
+log10_gamma_max  6.0000e+00       4.000e+00 6.000e+00  False 4.663e-03
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  2.0000e+00       0.000e+00 1.500e+01   True 0.000e+00
+        log10_B -7.3826e-01      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  4.8970e+06    s  1.000e+01 3.142e+07  False 1.405e+05

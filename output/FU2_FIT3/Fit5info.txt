@@ -1,0 +1,37 @@
+Info in matrix forced pos-def by adding to diagonal : padd = 0.00895619
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 494.205
+Info in Required Edm is : edmval = 0.0002
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 227                        │        Nfcn = 154 (154 total)        │
+│ EDM = 7.42e-05 (Goal: 0.0002)    │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│ Valid Minimum │ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │ Accurate  │  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : True
+        message    : Optimization terminated successfully.
+        nfev       : 154
+        total stat : 227.00
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -5.8587e+00      -2.000e+01 1.000e+01  False 3.723e-02
+             p1  2.8554e+00       1.000e+00 3.000e+00   True 0.000e+00
+             p2  3.4728e+00      -2.000e+00 5.000e+00   True 0.000e+00
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  2.7482e+00       0.000e+00 4.000e+00   True 0.000e+00
+log10_gamma_max  4.4912e+00       4.000e+00 6.000e+00   True 0.000e+00
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  1.4500e+00       0.000e+00 1.000e+04   True 0.000e+00
+        log10_B -5.9768e-01      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  8.2384e+06    s  1.000e+01 3.142e+07  False 2.824e+05

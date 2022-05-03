@@ -1,0 +1,121 @@
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 31.9186
+Info in matrix forced pos-def by adding to diagonal : padd = 1.50608
+Info: gdel = -125.701
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 3.0928
+Info in             requested : edmval = 0.0002
+Info in negative or zero diagonal element in covariance matrix : i = 2
+Info in added to diagonal of Error matrix a value : dg = 0.563856
+Info in matrix forced pos-def by adding to diagonal : padd = 0.0516151
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 18.9278
+Info in Required Edm is : edmval = 0.0002
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 1.69862
+Info in negative or zero diagonal element in covariance matrix : i = 4
+Info in negative or zero diagonal element in covariance matrix : i = 6
+Info in negative or zero diagonal element in covariance matrix : i = 7
+Info in negative or zero diagonal element in covariance matrix : i = 8
+Info in added to diagonal of Error matrix a value : dg = 0.500098
+Info: gdel = -3.5239e+06
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 7.15292e+07
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 81.185
+Info in             requested : edmval = 0.0002
+Info in matrix forced pos-def by adding to diagonal : padd = 0.412283
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 13.7104
+Info in Required Edm is : edmval = 0.0002
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 0.23747
+Info in negative or zero diagonal element in covariance matrix : i = 1
+Info in negative or zero diagonal element in covariance matrix : i = 4
+Info in negative or zero diagonal element in covariance matrix : i = 5
+Info in added to diagonal of Error matrix a value : dg = 0.500199
+Info: gdel = -3.0131e+06
+Info: MnHesse: maximum number of allowed function calls exhausted.
+Info: MnHesse fails and will return diagonal matrix 
+Info in matrix forced pos-def by adding to diagonal : padd = 0.00593167
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 8.31189
+Info in Required Edm is : edmval = 0.0002
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 2647.38
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 6.52263e+08
+Info in             requested : edmval = 0.0002
+Info in matrix forced pos-def by adding to diagonal : padd = 1.15899
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 846.924
+Info in Required Edm is : edmval = 0.0002
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 3387.7
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 2.72198e+08
+Info in             requested : edmval = 0.0002
+Info in matrix forced pos-def by adding to diagonal : padd = 1.15874
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 846.481
+Info in Required Edm is : edmval = 0.0002
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 3385.92
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 5.028                      │       Nfcn = 3729 (3729 total)       │
+│ EDM = 846 (Goal: 0.0002)         │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│INVALID Minimum│ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ ABOVE EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │APPROXIMATE│NOT pos. def.│   FORCED   │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : False
+        message    : Optimization failed. Estimated distance to minimum too large.
+        nfev       : 3729
+        total stat : 5.03
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -4.6368e+00      -2.000e+01 1.000e+01  False 1.460e-02
+             p1  2.3579e+00       1.000e+00 3.000e+00  False 2.473e-02
+             p2  3.3207e+00      -2.000e+00 5.000e+00  False 1.326e-01
+  log10_gamma_b  3.9308e+00       1.000e+00 5.000e+00  False 5.942e-03
+log10_gamma_min  2.2655e+00       0.000e+00 4.000e+00  False 4.967e-02
+log10_gamma_max  4.4964e+00       4.000e+00 6.000e+00  False 4.311e-03
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  1.1950e+01       0.000e+00 1.500e+01  False 7.042e-02
+        log10_B -1.6407e+00      -3.000e+00 1.000e+00  False 7.721e-03
+          t_var  9.9975e+04    s  1.000e+01 3.142e+07  False 1.358e+03

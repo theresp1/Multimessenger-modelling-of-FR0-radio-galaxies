@@ -1,0 +1,44 @@
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 5.72598
+Info in negative or zero diagonal element in covariance matrix : i = 2
+Info in added to diagonal of Error matrix a value : dg = 0.500154
+Info: gdel = -7.51721e+06
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def. : edm is < 0. Make pos def...
+Info in matrix forced pos-def by adding to diagonal : padd = 0.00589197
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 0.103358
+Info in Required Edm is : edmval = 0.0002
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 234.1                      │        Nfcn = 612 (612 total)        │
+│ EDM = 2.42e-07 (Goal: 0.0002)    │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│ Valid Minimum │ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │ Accurate  │  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : True
+        message    : Optimization terminated successfully.
+        nfev       : 612
+        total stat : 234.06
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -4.5044e+00      -2.000e+01 1.000e+01  False 4.806e-02
+             p1  2.4016e+00       1.000e+00 3.000e+00  False 2.212e-02
+             p2  5.0000e+00      -2.000e+00 5.000e+00   True 0.000e+00
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  1.7261e+00       0.000e+00 4.000e+00  False 3.693e-03
+log10_gamma_max  6.0000e+00       4.000e+00 6.000e+00   True 0.000e+00
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  8.2214e+00       0.000e+00 1.500e+01  False 4.205e-01
+        log10_B -8.8900e-01      -3.000e+00 1.000e+00  False 4.842e-02
+          t_var  8.6400e+04    s  1.000e+01 3.142e+07   True 0.000e+00

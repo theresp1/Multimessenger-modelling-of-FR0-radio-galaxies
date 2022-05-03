@@ -1,0 +1,43 @@
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 3.35001
+Info in             requested : edmval = 0.0002
+Info in matrix forced pos-def by adding to diagonal : padd = 0.00630954
+Info: MnHesse: matrix was forced pos. def. 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 4.49785
+Info in Required Edm is : edmval = 0.0002
+Info: VariableMetricBuilder: call limit exceeded.
+Info: VariableMetricBuilder: FunctionMinimum is invalid, reached the function call limit
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 354.4                      │       Nfcn = 1083 (1083 total)       │
+│ EDM = 4.5 (Goal: 0.0002)         │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│INVALID Minimum│ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           ABOVE call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │APPROXIMATE│  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : False
+        message    : Optimization failed. Call limit was reached.
+        nfev       : 1083
+        total stat : 354.37
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -4.9711e+00      -2.000e+01 1.000e+01  False 3.406e-02
+             p1  2.9678e+00       1.000e+00 3.000e+00  False 2.212e-02
+             p2  3.6759e+00      -2.000e+00 5.000e+00  False 3.600e-02
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  2.7813e+00       0.000e+00 4.000e+00  False 8.504e-03
+log10_gamma_max  6.0000e+00       4.000e+00 6.000e+00   True 0.000e+00
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  1.0182e+01       0.000e+00 1.500e+01  False 1.182e-01
+        log10_B -1.1898e+00      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  8.6400e+04    s  1.000e+01 3.142e+07   True 0.000e+00

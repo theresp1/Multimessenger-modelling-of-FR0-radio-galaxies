@@ -1,0 +1,32 @@
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 349.5                      │        Nfcn = 316 (316 total)        │
+│ EDM = 4.55e-07 (Goal: 0.0002)    │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│ Valid Minimum │ Valid Parameters │       SOME Parameters at limit       │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │ Accurate  │  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : True
+        message    : Optimization terminated successfully.
+        nfev       : 316
+        total stat : 349.47
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -5.6394e+00      -2.000e+01 1.000e+01  False 5.259e-02
+             p1  2.3040e+00       1.000e+00 3.000e+00  False 2.203e-02
+             p2  4.8000e+00      -2.000e+00 5.000e+00   True 0.000e+00
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  2.0000e+00       0.000e+00 4.000e+00   True 0.000e+00
+log10_gamma_max  6.0000e+00       4.000e+00 6.000e+00  False 8.090e-03
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  2.0000e+00       0.000e+00 1.500e+01   True 0.000e+00
+        log10_B -6.6826e-01      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  4.5022e+06    s  1.000e+01 3.142e+07  False 1.996e+05

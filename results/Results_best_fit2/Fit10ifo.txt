@@ -1,0 +1,42 @@
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: DavidonErrorUpdator: gvg <= 0 : cannot update - return same matrix 
+Info: DavidonErrorUpdator: gvg <= 0 : cannot update - return same matrix 
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: DavidonErrorUpdator: gvg <= 0 : cannot update - return same matrix 
+Info: VariableMetricBuilder: matrix not pos.def. : edm is < 0. Make pos def...
+Info in matrix forced pos-def by adding to diagonal : padd = 1.55775
+Info: VariableMetricBuilder: call limit exceeded.
+Info: VariableMetricBuilder: FunctionMinimum is invalid, reached the function call limit
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 229.8                      │        Nfcn = 983 (983 total)        │
+│ EDM = 3.1 (Goal: 0.0002)         │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│INVALID Minimum│ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           ABOVE call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │APPROXIMATE│  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : False
+        message    : Optimization failed. Call limit was reached.
+        nfev       : 983
+        total stat : 229.76
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -5.8413e+00      -2.000e+01 1.000e+01  False 5.070e-02
+             p1  2.4552e+00       1.000e+00 3.000e+00  False 2.206e-02
+             p2  4.1513e+00      -2.000e+00 5.000e+00  False 5.101e-02
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  2.0476e+00       0.000e+00 4.000e+00  False 1.143e-02
+log10_gamma_max  4.6908e+00       4.000e+00 6.000e+00  False 4.662e-03
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  1.2000e+00       0.000e+00 1.500e+01   True 0.000e+00
+        log10_B -4.4641e-01      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  1.0505e+07    s  1.000e+01 3.142e+07  False 5.082e+05

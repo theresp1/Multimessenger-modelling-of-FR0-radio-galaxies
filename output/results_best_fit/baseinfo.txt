@@ -1,0 +1,119 @@
+  u = 1 / 2 + np.exp(-tau) / tau - (1 - np.exp(-tau)) / np.power(tau, 2)
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 439.604
+Info in negative or zero diagonal element in covariance matrix : i = 0
+Info in negative or zero diagonal element in covariance matrix : i = 2
+Info in added to diagonal of Error matrix a value : dg = 0.500467
+Info: gdel = -2.78338e+07
+/home/theresepaulsen/Documents/python_projects/test_folder/spectral_fitting/lib/python3.9/site-packages/agnpy/synchrotron/synchrotron.py:67: RuntimeWarning: overflow encountered in true_divide
+  return np.where(tau < 1e-3, 1, 3 * u / tau)
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def. : edm is < 0. Make pos def...
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in added to diagonal of Error matrix a value : dg = 0.500004
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 7.07773
+Info in Required Edm is : edmval = 0.0002
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 991451
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 0.341144
+Info in negative or zero diagonal element in covariance matrix : i = 0
+Info in negative or zero diagonal element in covariance matrix : i = 1
+Info in negative or zero diagonal element in covariance matrix : i = 2
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in negative or zero diagonal element in covariance matrix : i = 4
+Info in negative or zero diagonal element in covariance matrix : i = 5
+Info in added to diagonal of Error matrix a value : dg = 0.534526
+Info: gdel = -2462.33
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: no improvement in line search
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 107.07
+Info in             requested : edmval = 0.0002
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 0.139537
+Info in Required Edm is : edmval = 0.0002
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 207.2                      │       Nfcn = 1403 (1403 total)       │
+│ EDM = 2.72e-08 (Goal: 0.0002)    │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│ Valid Minimum │ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │ Accurate  │  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : True
+        message    : Optimization terminated successfully.
+        nfev       : 1403
+        total stat : 207.18
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -5.6863e+00      -2.000e+01 1.000e+01  False 5.381e-02
+             p1  2.4575e+00       1.000e+00 3.000e+00  False 2.574e-02
+             p2  4.2463e+00      -2.000e+00 5.000e+00  False 4.745e-02
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  2.0196e+00       0.000e+00 4.000e+00  False 2.001e-02
+log10_gamma_max  5.4094e+00       4.000e+00 6.000e+00  False 1.054e-01
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  2.0000e+00       0.000e+00 1.500e+01   True 0.000e+00
+        log10_B -6.6826e-01      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  4.0567e+06    s  1.000e+01 3.142e+07  False 1.962e+05
+
+
+
+
+          ##vavlues set by eye
+v_c = 5.38 *10**21
+v_s = 7.93 *10**13
+
+#Values set by Tavecchio
+Radius = 5 *10**16 * u.cm
+
+# declare a model 
+agnpy_ssc = AgnpySSC()
+# initialise parameters
+z = 0.0284
+d_L = Distance(z=z).to("cm")
+# - AGN parameters
+agnpy_ssc.z.quantity = z
+agnpy_ssc.z.frozen = True
+agnpy_ssc.d_L.quantity = d_L
+agnpy_ssc.d_L.frozen = True
+# - blob parameters
+agnpy_ssc.delta_D.quantity = 2
+agnpy_ssc.delta_D.frozen = True
+agnpy_ssc.log10_B.quantity = np.log10( 1/(2) * (1+z) * (v_s**2)/(2.8*10**6* v_c))  # Value: -6.6826e-01 
+#agnpy_ssc.log10_B.quantity = np.log10( 1/(6.6466) * (1+z) * (v_s**2)/(2.8*10**6* v_c)  )
+agnpy_ssc.log10_B.frozen = True
+#agnpy_ssc.t_var.quantity = 1 * u.d
+agnpy_ssc.t_var.quantity = (Radius * (1+z))/(c.cgs *2) 
+#agnpy_ssc.t_var.quantity = 4.8970e+06
+agnpy_ssc.t_var.frozen = False
+#agnpy_ssc.gamma.quantity = 2
+#agnpy_ssc.gamma.frozen = True
+# - EED
+agnpy_ssc.log10_k_e.quantity = -5.7740e+00 
+agnpy_ssc.log10_k_e.frozen = False
+agnpy_ssc.p1.quantity = 2.3746e+00
+agnpy_ssc.p2.quantity = 4.2104e+00 
+agnpy_ssc.p1.frozen = False
+agnpy_ssc.p2.frozen = False
+agnpy_ssc.log10_gamma_b.quantity = np.log10((3*v_c/(4*v_s))**0.5)
+agnpy_ssc.log10_gamma_b.frozen = True
+agnpy_ssc.log10_gamma_min.quantity = 1.9472e+00 
+agnpy_ssc.log10_gamma_min.frozen = False
+agnpy_ssc.log10_gamma_max.quantity = 5.9
+agnpy_ssc.log10_gamma_max.frozen = False

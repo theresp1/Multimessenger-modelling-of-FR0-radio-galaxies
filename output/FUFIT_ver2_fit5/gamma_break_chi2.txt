@@ -1,0 +1,7 @@
+log10gamma_break,chi2,success
+3.3979e+00,250.4,True
+3.2979e+00,393.7,True
+3.3479e+00,286.2,True
+3.4479e+00,282.9,True
+3.4079e+00,252.2,True
+3.3879e+00,251.6,True

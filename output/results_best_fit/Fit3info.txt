@@ -1,0 +1,69 @@
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 104.284
+Info in negative or zero diagonal element in covariance matrix : i = 1
+Info in negative or zero diagonal element in covariance matrix : i = 2
+Info in negative or zero diagonal element in covariance matrix : i = 3
+Info in negative or zero diagonal element in covariance matrix : i = 4
+Info in negative or zero diagonal element in covariance matrix : i = 5
+Info in added to diagonal of Error matrix a value : dg = 0.57603
+Info: gdel = -5.08963e+08
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 3.54695
+Info in matrix forced pos-def by adding to diagonal : padd = 0.399431
+Info: gdel = -134.576
+Info: VariableMetricBuilder: no improvement in line search
+Info in MnHesse: 2nd derivative zero for Parameter  : name = par_003_log10_gamma_min
+Info: MnHesse fails and will return diagonal matrix 
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 0.000879506
+Info in Required Edm is : edmval = 0.0002
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: matrix not pos.def, gdel > 0
+Info: gdel = 0.0597546
+Info in negative or zero diagonal element in covariance matrix : i = 4
+Info in added to diagonal of Error matrix a value : dg = 0.501572
+Info: gdel = -20120
+Info: MnHesse: maximum number of allowed function calls exhausted.
+Info: MnHesse fails and will return diagonal matrix 
+Info in MnHesse: 2nd derivative zero for Parameter  : name = par_003_log10_gamma_min
+Info: MnHesse fails and will return diagonal matrix 
+Info in MnHesse: 2nd derivative zero for Parameter  : name = par_003_log10_gamma_min
+Info: MnHesse fails and will return diagonal matrix 
+Info in MnHesse: 2nd derivative zero for Parameter  : name = par_003_log10_gamma_min
+Info: MnHesse fails and will return diagonal matrix 
+Info in MnHesse: 2nd derivative zero for Parameter  : name = par_003_log10_gamma_min
+Info: MnHesse fails and will return diagonal matrix 
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 217.8                      │       Nfcn = 1297 (1297 total)       │
+│ EDM = 7.98e-07 (Goal: 0.0002)    │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│INVALID Minimum│ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│ Hesse FAILED  │  Has Covariance  │APPROXIMATE│NOT pos. def.│ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : False
+        message    : Optimization failed.
+        nfev       : 1297
+        total stat : 217.79
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -5.5197e+00      -2.000e+01 1.000e+01  False       nan
+             p1  2.3550e+00       1.000e+00 3.000e+00  False       nan
+             p2  4.3907e+00      -2.000e+00 5.000e+00  False       nan
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  4.4253e-03       0.000e+00 4.000e+00  False       nan
+log10_gamma_max  5.4473e+00       4.000e+00 6.000e+00  False       nan
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  2.0000e+00       0.000e+00 1.500e+01   True 0.000e+00
+        log10_B -5.6826e-01      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  3.0732e+06    s  1.000e+01 3.142e+07  False       nan

@@ -1,0 +1,86 @@
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 246.2                      │         Nfcn = 76 (76 total)         │
+│ EDM = 6.27e-08 (Goal: 0.0002)    │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│ Valid Minimum │ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           Below call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │ Accurate  │  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : True
+        message    : Optimization terminated successfully.
+        nfev       : 76
+        total stat : 246.22
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -3.0887e+00      -2.000e+01 1.000e+01  False 3.700e-02
+             p1  2.0000e+00       1.000e+00 3.000e+00   True 0.000e+00
+             p2  4.1000e+00      -2.000e+00 5.000e+00   True 0.000e+00
+  log10_gamma_b  3.3979e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  2.0500e+00       0.000e+00 4.000e+00   True 0.000e+00
+log10_gamma_max  4.4771e+00       4.000e+00 6.000e+00   True 0.000e+00
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  1.6000e+00       0.000e+00 1.000e+04   True 0.000e+00
+        log10_B  1.5109e-01      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  7.7685e+05    s  1.000e+01 3.142e+07  False 2.666e+04
+
+
+# declare a model 
+agnpy_ssc = AgnpySSC()
+# initialise parameters
+z = 0.0284
+d_L = Distance(z=z).to("cm")
+# - AGN parameters
+agnpy_ssc.z.quantity = z
+agnpy_ssc.z.frozen = True
+agnpy_ssc.d_L.quantity = d_L
+agnpy_ssc.d_L.frozen = True
+# - blob parameters
+agnpy_ssc.delta_D.quantity = 1.6
+agnpy_ssc.delta_D.frozen = True
+agnpy_ssc.log10_B.quantity =  1.5109e-01
+#agnpy_ssc.log10_B.quantity = np.log10( 1/(6.6466) * (1+z) * (v_s**2)/(2.8*10**6* v_c)  )
+agnpy_ssc.log10_B.frozen = True
+#agnpy_ssc.t_var. quantity = 1 * u.d
+#agnpy_ssc.t_var.quantity = (Radius * (1+z))/(c.cgs *2) 
+agnpy_ssc.t_var.quantity = 1.5412e+06 
+#agnpy_ssc.t_var.quantity = 4.8970e+06
+agnpy_ssc.t_var.frozen = False
+#agnpy_ssc.gamma.quantity = 2
+#agnpy_ssc.gamma.frozen = True
+# - EED
+agnpy_ssc.log10_k_e.quantity = -3.3682e+00  
+agnpy_ssc.log10_k_e.frozen = False
+agnpy_ssc.p1.quantity = 2.0 
+agnpy_ssc.p2.quantity = 4.1
+agnpy_ssc.p1.frozen = True
+agnpy_ssc.p2.frozen = True
+agnpy_ssc.log10_gamma_b.quantity = np.log10(2500) 
+agnpy_ssc.log10_gamma_b.frozen = True
+agnpy_ssc.log10_gamma_min.quantity = 2.0500e+00
+agnpy_ssc.log10_gamma_min.frozen = True
+agnpy_ssc.log10_gamma_max.quantity = np.log10(3*10**4)
+agnpy_ssc.log10_gamma_max.frozen = True
+
+
+  tag = "SSC"
+    log10_k_e = Parameter("log10_k_e", -5, min=-20, max=10)
+    p1 = Parameter("p1", 2.1, min=1.0, max=3.0)
+    p2 = Parameter("p2", 3.1, min=-2.0, max=5.0)
+    log10_gamma_b = Parameter("log10_gamma_b", 3, min=1, max=5)
+    log10_gamma_min = Parameter("log10_gamma_min", 1, min=0, max=4)
+    log10_gamma_max = Parameter("log10_gamma_max", 5, min=4, max=6)
+    # source general parameters
+    z = Parameter("z", 0.1, min=0.01, max=0.1)
+    d_L = Parameter("d_L", "1e27 cm", min=1e25, max=1e33)
+    # emission region parameters
+    delta_D = Parameter("delta_D", 10, min=0, max=10000)
+    log10_B = Parameter("log10_B", -2, min=-3, max=1.0)
+    t_var = Parameter("t_var", "600 s", min=10, max=np.pi * 1e7)

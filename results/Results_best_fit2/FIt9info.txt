@@ -1,0 +1,35 @@
+Info: DavidonErrorUpdator: delgam < 0 : first derivatives increasing along search line
+Info: VariableMetricBuilder: call limit exceeded.
+Info: VariableMetricBuilder: FunctionMinimum is invalid, reached the function call limit
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 223.6                      │        Nfcn = 980 (980 total)        │
+│ EDM = 0.0191 (Goal: 0.0002)      │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│INVALID Minimum│ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           ABOVE call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │APPROXIMATE│  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : False
+        message    : Optimization failed. Call limit was reached.
+        nfev       : 980
+        total stat : 223.65
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -5.8219e+00      -2.000e+01 1.000e+01  False 3.967e-02
+             p1  2.4271e+00       1.000e+00 3.000e+00  False 2.667e-02
+             p2  4.2258e+00      -2.000e+00 5.000e+00  False 5.540e-02
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  1.9247e+00       0.000e+00 4.000e+00  False 3.592e-05
+log10_gamma_max  4.8641e+00       4.000e+00 6.000e+00  False 4.779e-04
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  1.3000e+00       0.000e+00 1.500e+01   True 0.000e+00
+        log10_B -4.8118e-01      -3.000e+00 1.000e+00   True 0.000e+00
+          t_var  9.2173e+06    s  1.000e+01 3.142e+07  False 3.020e+05

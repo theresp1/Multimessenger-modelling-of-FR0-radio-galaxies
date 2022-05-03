@@ -1,0 +1,92 @@
+  u = 1 / 2 + np.exp(-tau) / tau - (1 - np.exp(-tau)) / np.power(tau, 2)
+(spectral_fitting) theresepaulsen@pop-os:~/Documents/python_projects/test_folder$ ^C
+(spectral_fitting) theresepaulsen@pop-os:~/Documents/python_projects/test_folder$ /home/theresepaulsen/Documents/python_projects/test_folder/spectral_fitting/bin/python /home/theresepaulsen/Documents/python_projects/test_folder/best_fit.py
+/home/theresepaulsen/Documents/python_projects/test_folder/spectral_fitting/lib/python3.9/site-packages/agnpy/synchrotron/synchrotron.py:66: RuntimeWarning: divide by zero encountered in true_divide
+  u = 1 / 2 + np.exp(-tau) / tau - (1 - np.exp(-tau)) / np.power(tau, 2)
+/home/theresepaulsen/Documents/python_projects/test_folder/spectral_fitting/lib/python3.9/site-packages/agnpy/synchrotron/synchrotron.py:66: RuntimeWarning: invalid value encountered in true_divide
+  u = 1 / 2 + np.exp(-tau) / tau - (1 - np.exp(-tau)) / np.power(tau, 2)
+/home/theresepaulsen/Documents/python_projects/test_folder/spectral_fitting/lib/python3.9/site-packages/agnpy/synchrotron/synchrotron.py:66: RuntimeWarning: divide by zero encountered in true_divide
+  u = 1 / 2 + np.exp(-tau) / tau - (1 - np.exp(-tau)) / np.power(tau, 2)
+/home/theresepaulsen/Documents/python_projects/test_folder/spectral_fitting/lib/python3.9/site-packages/agnpy/synchrotron/synchrotron.py:66: RuntimeWarning: invalid value encountered in true_divide
+  u = 1 / 2 + np.exp(-tau) / tau - (1 - np.exp(-tau)) / np.power(tau, 2)
+/home/theresepaulsen/Documents/python_projects/test_folder/spectral_fitting/lib/python3.9/site-packages/agnpy/synchrotron/synchrotron.py:67: RuntimeWarning: overflow encountered in true_divide
+  return np.where(tau < 1e-3, 1, 3 * u / tau)
+Info: VariableMetricBuilder: call limit exceeded.
+Info: VariableMetricBuilder: FunctionMinimum is invalid, reached the function call limit
+┌──────────────────────────────────┬──────────────────────────────────────┐
+│ FCN = 225.3                      │       Nfcn = 1169 (1169 total)       │
+│ EDM = 0.901 (Goal: 0.0002)       │                                      │
+├───────────────┬──────────────────┼──────────────────────────────────────┤
+│INVALID Minimum│ Valid Parameters │        No Parameters at limit        │
+├───────────────┴──────────────────┼──────────────────────────────────────┤
+│ Below EDM threshold (goal x 10)  │           ABOVE call limit           │
+├───────────────┬──────────────────┼───────────┬─────────────┬────────────┤
+│   Hesse ok    │  Has Covariance  │APPROXIMATE│  Pos. def.  │ Not forced │
+└───────────────┴──────────────────┴───────────┴─────────────┴────────────┘
+OptimizeResult
+
+        backend    : minuit
+        method     : minuit
+        success    : False
+        message    : Optimization failed. Call limit was reached.
+        nfev       : 1169
+        total stat : 225.32
+
+      name         value    unit    min        max    frozen   error  
+--------------- ----------- ---- ---------- --------- ------ ---------
+      log10_k_e -5.4424e+00      -2.000e+01 1.000e+01  False 7.495e-02
+             p1  2.5075e+00       1.000e+00 3.000e+00  False 2.336e-02
+             p2  3.6903e+00      -2.000e+00 5.000e+00  False 2.933e-01
+  log10_gamma_b  3.8533e+00       1.000e+00 5.000e+00   True 0.000e+00
+log10_gamma_min  1.9429e+00       0.000e+00 4.000e+00  False 1.132e-03
+log10_gamma_max  4.2823e+00       4.000e+00 6.000e+00  False 1.178e-03
+              z  2.8400e-02       1.000e-02 1.000e-01   True 0.000e+00
+            d_L  3.9666e+26   cm  1.000e+25 1.000e+33   True 0.000e+00
+        delta_D  2.0000e+00       0.000e+00 1.500e+01   True 0.000e+00
+        log10_B -3.9281e-01      -3.000e+00 1.000e+00  False 4.160e-02
+          t_var  2.1262e+06    s  1.000e+01 3.142e+07  False 2.033e+05
+
+
+          ##vavlues set by eye
+v_c = 5.38 *10**21
+v_s = 7.93 *10**13
+
+#Values set by Tavecchio
+Radius = 5 *10**16 * u.cm
+
+# declare a model 
+agnpy_ssc = AgnpySSC()
+# initialise parameters
+z = 0.0284
+d_L = Distance(z=z).to("cm")
+# - AGN parameters
+agnpy_ssc.z.quantity = z
+agnpy_ssc.z.frozen = True
+agnpy_ssc.d_L.quantity = d_L
+agnpy_ssc.d_L.frozen = True
+# - blob parameters
+agnpy_ssc.delta_D.quantity = 2
+agnpy_ssc.delta_D.frozen = True
+agnpy_ssc.log10_B.quantity = np.log10( 1/(2) * (1+z) * (v_s**2)/(2.8*10**6* v_c))  # Value: -6.6826e-01 
+#agnpy_ssc.log10_B.quantity = np.log10( 1/(6.6466) * (1+z) * (v_s**2)/(2.8*10**6* v_c)  )
+agnpy_ssc.log10_B.frozen = False
+#agnpy_ssc.t_var.quantity = 1 * u.d
+agnpy_ssc.t_var.quantity = (Radius * (1+z))/(c.cgs *2) 
+#agnpy_ssc.t_var.quantity = 4.8970e+06
+agnpy_ssc.t_var.frozen = False
+#agnpy_ssc.gamma.quantity = 2
+#agnpy_ssc.gamma.frozen = True
+# - EED
+agnpy_ssc.log10_k_e.quantity = -5.7740e+00 
+agnpy_ssc.log10_k_e.frozen = False
+agnpy_ssc.p1.quantity = 2.3746e+00
+agnpy_ssc.p2.quantity = 4.2104e+00 
+agnpy_ssc.p1.frozen = False
+agnpy_ssc.p2.frozen = False
+agnpy_ssc.log10_gamma_b.quantity = np.log10((3*v_c/(4*v_s))**0.5)
+agnpy_ssc.log10_gamma_b.frozen = True
+agnpy_ssc.log10_gamma_min.quantity = 1.9472e+00 
+agnpy_ssc.log10_gamma_min.frozen = False
+agnpy_ssc.log10_gamma_max.quantity = 5.9
+agnpy_ssc.log10_gamma_max.frozen = False
+
