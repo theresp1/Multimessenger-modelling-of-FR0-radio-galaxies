@@ -181,7 +181,7 @@ class AgnpyEC(SpectralModel):
 SPECTRAL_MODEL_REGISTRY.append(AgnpyEC)
 
 
-df_1                = pd.read_csv('input/new_Tol_values3.csv')
+df_1                = pd.read_csv('new_Tol_values3.csv')
 x_v                 = df_1["frequency"].copy()
 y_v                 = df_1["flux"].copy()
 negative_error_bar  = df_1["flux_errn"].copy()
@@ -312,8 +312,8 @@ agnpy_ec = AgnpyEC()
 z = 0.361
 d_L = Distance(z=z).to("cm")
 # blob
-Gamma = 20
-delta_D = 25
+Gamma = 3
+delta_D = 4
 Beta = np.sqrt(1 - 1 / np.power(Gamma, 2))  # jet relativistic speed
 mu_s = (1 - 1 / (Gamma * delta_D)) / Beta  # viewing angle
 B = 0.35 * u.G
@@ -399,7 +399,7 @@ print(agnpy_ec.parameters.to_table())
 flux_points.plot(energy_unit="eV", energy_power=2)
 agnpy_ec.plot(energy_range=[1e-10, 1e15] * u.eV, energy_unit="eV", energy_power=2)
 plt.ylim([10 ** (-19), 10 ** (-7)])
-plt.savefig("bad_fits/bad_fit5.png")
+plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/bad_fits/bad_fit5.png")
 plt.show()
 
 # define the emission region and the thermal emitters
@@ -533,5 +533,5 @@ ax.set_ylim([10 ** (-25), 10 ** (-7)])
 ax.legend(
     loc="upper center", fontsize=9, ncol=2,
 )
-plt.savefig("bad_fits/bad_fit5.1.png")
+plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/bad_fits/bad_fit5.1.png")
 plt.show()
