@@ -399,7 +399,7 @@ print(agnpy_ec.parameters.to_table())
 flux_points.plot(energy_unit="eV", energy_power=2)
 agnpy_ec.plot(energy_range=[1e-10, 1e15] * u.eV, energy_unit="eV", energy_power=2)
 plt.ylim([10 ** (-19), 10 ** (-7)])
-plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/bad_fits/bad_fit5.png")
+#plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/bad_fits/bad_fit5.png")
 plt.show()
 
 # define the emission region and the thermal emitters
@@ -533,5 +533,5 @@ ax.set_ylim([10 ** (-25), 10 ** (-7)])
 ax.legend(
     loc="upper center", fontsize=9, ncol=2,
 )
-plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/bad_fits/bad_fit5.1.png")
+#plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/bad_fits/bad_fit5.1.png")
 plt.show()

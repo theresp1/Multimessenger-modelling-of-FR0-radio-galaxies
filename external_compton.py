@@ -73,13 +73,13 @@ class AgnpyEC(SpectralModel):
     d_L = Parameter("d_L", "1e27 cm", min=1e25, max=1e33)
     # emission region parameters
     delta_D = Parameter("delta_D", 10, min=0, max=15)
-    log10_B = Parameter("log10_B", 0.0, min=-5, max=1.0)
+    log10_B = Parameter("log10_B", 0.0, min=-5, max=2.0)
     #t_var = Parameter("t_var", "600 s", min=10, max=np.pi * 1e7)
     mu_s = Parameter("mu_s", 0.9, min=0.0, max=1.0)
     log10_r = Parameter("log10_r", 17.0, min=16.0, max=20.0)
     # disk parameters
     log10_L_disk = Parameter("log10_L_disk", 45.0, min=39.0, max=48.0)
-    log10_M_BH = Parameter("log10_M_BH", 42, min=np.log10(0.8e9 * M_sun.cgs.value), max=np.log10(1.2e9 * M_sun.cgs.value))
+    log10_M_BH = Parameter("log10_M_BH", 42, min=np.log10(0.8e7 * M_sun.cgs.value), max=np.log10(1.2e11 * M_sun.cgs.value))
     log10_r_ssd = Parameter("log10_r_ssd",17, min= 10.0,max=20.0)
     ## check if this is cgs or si ((it is si, but do we want it in grams? ))
     #log10_M_BH = Parameter("log10_M_BH", 42, min=np.log10(0.8e9 * M_sun), max=np.log10(1.2e9 * M_sun))
@@ -88,13 +88,13 @@ class AgnpyEC(SpectralModel):
     R_in = Parameter("R_in", "1e14 cm", min=1e12, max=1e16)
     R_out = Parameter("R_out", "1e17 cm", min=1e12, max=1e19)
     # DT parameters
-    xi_dt = Parameter("xi_dt", 0.6, min=0.0, max=1.0)
-    T_dt = Parameter("T_dt", "1e3 K", min=1e2, max=1e9)
-    R_dt = Parameter("R_dt", "2.5e18 cm", min=1.0e17, max=1.0e19)
+    # xi_dt = Parameter("xi_dt", 0.6, min=0.0, max=1.0)
+    # T_dt = Parameter("T_dt", "1e3 K", min=1e2, max=1e9)
+    # R_dt = Parameter("R_dt", "2.5e18 cm", min=1.0e17, max=1.0e19)
     #BLR parameters 
-    xi_line = Parameter("xi_line",0.6, min =0.0, max=1.0)
-    epsilon_line = Parameter("epsilon_line",1e6,min= 1e-6, max = 1e16 )
-    R_line = Parameter("R_line","1e14 cm", min = 1e4,max = 1e20)
+    # xi_line = Parameter("xi_line",0.6, min =0.0, max=1.0)
+    # epsilon_line = Parameter("epsilon_line",1e6,min= 1e-6, max = 1e16 )
+    # R_line = Parameter("R_line","1e14 cm", min = 1e4,max = 1e20)
 
 
     @staticmethod
@@ -119,12 +119,12 @@ class AgnpyEC(SpectralModel):
         m_dot,
         R_in,
         R_out,
-        xi_dt,
-        T_dt,
-        R_dt,
-        xi_line,
-        epsilon_line,
-        R_line,
+    #    xi_dt,
+    #    T_dt,
+        # R_dt,
+        # xi_line,
+        # epsilon_line,
+        # R_line,
     ):
         # conversions
         k_e = 10 ** log10_k_e * u.Unit("cm-3")
@@ -132,12 +132,12 @@ class AgnpyEC(SpectralModel):
         gamma_min = 10 ** log10_gamma_min
         gamma_max = 10 ** log10_gamma_max
         B = 10 ** log10_B * u.G
-        R_b =  5 *10**16 * u.cm
+        R_b =  5*10**16 * u.cm
         r = 10 ** log10_r * u.cm
         r_ssd = 10**log10_r_ssd * u.cm
         L_disk = 10 ** log10_L_disk * u.Unit("erg s-1")
         M_BH = 10 ** log10_M_BH * u.Unit("g")
-        eps_dt = 2.7 * (k_B * T_dt / mec2).to_value("")
+        #eps_dt = 2.7 * (k_B * T_dt / mec2).to_value("")
 
         nu = energy.to("Hz", equivalencies=u.spectral())
         # non-thermal components
@@ -175,27 +175,27 @@ class AgnpyEC(SpectralModel):
             ssa =  False,   # dont need this for the SSC
             gamma=gamma_to_integrate,
         )
-        sed_ec_dt = ExternalCompton.evaluate_sed_flux_dt(
-            nu,
-            z,
-            d_L,
-            delta_D,
-            mu_s,
-            R_b,
-            L_disk,
-            xi_dt,
-            eps_dt,
-            R_dt,
-            r,
-            BrokenPowerLaw,
-            k_e,
-            p1,
-            p2,
-            gamma_b,
-            gamma_min,
-            gamma_max,
-            gamma=gamma_to_integrate,
-        )
+        # sed_ec_dt = ExternalCompton.evaluate_sed_flux_dt(
+        #     nu,
+        #     z,
+        #     d_L,
+        #     delta_D,
+        #     mu_s,
+        #     R_b,
+        #     L_disk,
+        #     xi_dt,
+        #     eps_dt,
+        #     R_dt,
+        #     r,
+        #     BrokenPowerLaw,
+        #     k_e,
+        #     p1,
+        #     p2,
+        #     gamma_b,
+        #     gamma_min,
+        #     gamma_max,
+        #     gamma=gamma_to_integrate,
+        #)
         sed_ec_SSDisk = ExternalCompton.evaluate_sed_flux_ss_disk(
             nu,
             z,
@@ -221,39 +221,39 @@ class AgnpyEC(SpectralModel):
             mu_size=100,
             phi=phi_to_integrate,
         )
-        sed_ec_blr = ExternalCompton.evaluate_sed_flux_blr(
-            nu,
-            z,
-            d_L,
-            delta_D,
-            mu_s,
-            R_b,
-            L_disk,
-            xi_line,
-            epsilon_line,
-            R_line,
-            r,
-            BrokenPowerLaw,
-            k_e,
-            p1,
-            p2,
-            gamma_b,
-            gamma_min,
-            gamma_max,
-            integrator=np.trapz,
-            gamma=gamma_to_integrate,
-            mu=mu_to_integrate,
-            phi=phi_to_integrate,
+        # sed_ec_blr = ExternalCompton.evaluate_sed_flux_blr(
+            # nu,
+            # z,
+            # d_L,
+            # delta_D,
+            # mu_s,
+            # R_b,
+            # L_disk,
+            # xi_line,
+            # epsilon_line,
+            # R_line,
+            # r,
+            # BrokenPowerLaw,
+            # k_e,
+            # p1,
+            # p2,
+            # gamma_b,
+            # gamma_min,
+            # gamma_max,
+            # integrator=np.trapz,
+            # gamma=gamma_to_integrate,
+            # mu=mu_to_integrate,
+            # phi=phi_to_integrate,
 
-        )
+        #)
         # thermal components
         sed_bb_disk = SSDisk.evaluate_multi_T_bb_norm_sed(
             nu, z, L_disk, M_BH, m_dot, R_in, R_out, d_L
         )
-        sed_bb_dt = RingDustTorus.evaluate_bb_norm_sed(
-            nu, z, xi_dt * L_disk, T_dt, R_dt, d_L
-        )
-        sed = sed_synch + sed_ssc + sed_bb_disk + sed_bb_dt + sed_ec_SSDisk + sed_ec_dt  #+ sed_ec_blr
+        # sed_bb_dt = RingDustTorus.evaluate_bb_norm_sed(
+        #     nu, z, xi_dt * L_disk, T_dt, R_dt, d_L
+        # )
+        sed = sed_synch + sed_ssc + sed_bb_disk + sed_ec_SSDisk #+ sed_ec_dt  #+ sed_ec_blr + sed_bb_dt 
         return (sed / energy ** 2).to("1 / (cm2 eV s)")
 
 # IMPORTANT: add the new custom model to the registry of spectral models recognised by gammapy
@@ -336,7 +336,7 @@ flux_points = FluxPoints(table)
 x = flux_points.table["e_ref"]
 y = flux_points.table["e2dnde"]
 y_err_stat = (flux_points.table["e2dnde_errn"] + flux_points.table["e2dnde_errp"])/2  
-print("initial stat error",y_err_stat)
+#print("initial stat error",y_err_stat)
 
 unc_opt = 0.05
 unc_x   = 0.1 
@@ -353,7 +353,7 @@ y_err_stat[8] = y[8] * unc_opt
 y_err_stat[10] = y[10] * unc_x
 #y_err_stat[11] = y[11] * unc
 #y_err_stat[12] = y[12] * unc
-print("y err stat: ", y_err_stat)
+#print("y err stat: ", y_err_stat)
 y_err_syst = np.zeros(len(x))
 # define energy ranges
 e_vhe = 100 * u.GeV
@@ -362,7 +362,7 @@ e_x_ray_max = 300 * u.keV
 e_x_ray_min = 0.3 * u.keV
 e_optical_max = (3000 * 1e12 * u.Hz).to(u.eV,equivalencies=u.spectral()) # 3000 THz
 e_optical_min = (300 * 1e9* u.Hz).to(u.eV,equivalencies=u.spectral()) ##300GHz
-print("e_optical_max",e_optical_max.to(u.keV))
+#print("e_optical_max",e_optical_max.to(u.keV))
 vhe_gamma = x >= e_vhe
 he_gamma = (x >= e_he) * (x < e_vhe)
 x_ray = (x >= e_x_ray_min) * (x < e_x_ray_max)
@@ -375,7 +375,7 @@ y_err_syst[he_gamma] = 0.15
 #y_err_syst[optical] = 0.7
 #y_err_syst[micro_to_radio] = 0.05
 #y_err_syst[uv] = 0.05
-print("y_err_syst", y_err_syst) 
+#print("y_err_syst", y_err_syst) 
 ## add something as statistical error for radio and optical 
 y_err_syst = y * y_err_syst
 # sum in quadrature the errors
@@ -397,35 +397,35 @@ agnpy_ec = AgnpyEC()
 z       = 0.0284
 d_L     = Distance(z=z).to("cm")
 # blob
-Gamma   = 3.0
-delta_D = 5.0
+Gamma   =  1.05
+delta_D =  1.30
 Beta    = np.sqrt(1 - 1 / np.power(Gamma, 2))  # jet relativistic speed
 mu_s    =  (1 - 1 / (Gamma * delta_D)) / Beta  # viewing angle
-B       = 1.3 * u.G
+B       = 1.5 * u.G
 # disk
-L_disk  = 1.7e42 * u.Unit("erg s-1")  # disk luminosity
-M_BH    = 0.4e9 * M_sun   #1e8-1e9 range leave it free 
+L_disk  = 1.2e42 * u.Unit("erg s-1")  # disk luminosity
+M_BH    = 0.5e8 * M_sun   #1e8-1e9 range leave it free 
 eta     = 1 / 12
 m_dot   = (L_disk / (eta * c ** 2)).to("g s-1") #about 40Msolar
 R_g     = ((G * M_BH) / c ** 2).to("cm")
 R_in    = 3 * R_g
-R_out   = 200 * R_g #too much with 1000?  
+R_out   = 400 * R_g #too much with 1000?  
 # DT
-xi_dt   = 0.5  # fraction of disk luminosity reprocessed by the DT
-T_dt    = 0.5e3 * u.K # 500-2000K range   or 10**4 -10**9 range? 
-R_dt    = 2.5 * 10**18 * (L_disk/(10**45 * u.Unit("erg s-1")))**2  *u.cm  #6.47 * 1e18 * u.cm
-print("R_dt:", R_dt)
+# xi_dt   = 0.5  # fraction of disk luminosity reprocessed by the DT
+# T_dt    = 0.5e3 * u.K # 500-2000K range   or 10**4 -10**9 range? 
+# R_dt    = 2.5 * 10**18 * (L_disk/(10**45 * u.Unit("erg s-1")))**2  *u.cm  #6.47 * 1e18 * u.cm
+#print("R_dt:", R_dt)
 # BLR
-xi_line      = 0.5                 #fraction of the disk radiation reprocessed by the BLR
-epsilon_line = 1e6                 #dimensionless energy of the emitted line
-R_line       = 1e14                #radius of the BLR spherical shell
+# xi_line      = 0.5                 #fraction of the disk radiation reprocessed by the BLR
+# epsilon_line = 1e6                 #dimensionless energy of the emitted line
+# R_line       = 1e14                #radius of the BLR spherical shell
 
 
 
 # size and location of the emission region
 #t_var   = 7.9062e+05 * u.s
-r       = 5e18 * u.cm
-r_ssd   = 5e17 * u.cm
+r       = 5e17 * u.cm
+r_ssd   = 2e15 * u.cm
 # instance of the model wrapping angpy functionalities
 
 # - AGN parameters
@@ -438,7 +438,7 @@ agnpy_ec.d_L.frozen = True
 agnpy_ec.log10_L_disk.quantity = np.log10(L_disk.to_value("erg s-1"))
 agnpy_ec.log10_L_disk.frozen   = True
 agnpy_ec.log10_M_BH.quantity = np.log10(M_BH.to_value("g"))
-agnpy_ec.log10_M_BH.frozen   = False
+agnpy_ec.log10_M_BH.frozen   = True
 agnpy_ec.m_dot.quantity = m_dot
 agnpy_ec.m_dot.frozen    = True
 agnpy_ec.R_in.quantity = R_in
@@ -446,38 +446,43 @@ agnpy_ec.R_in.frozen   = True
 agnpy_ec.R_out.quantity = R_out
 agnpy_ec.R_out.frozen   = True
 # -- Dust Torus
-agnpy_ec.xi_dt.quantity = xi_dt
-agnpy_ec.xi_dt.frozen   = True
-agnpy_ec.T_dt.quantity = T_dt
-agnpy_ec.T_dt.frozen = False
-agnpy_ec.R_dt.quantity = R_dt
-agnpy_ec.R_dt.frozen = True
+# agnpy_ec.xi_dt.quantity = xi_dt
+# agnpy_ec.xi_dt.frozen   = True
+# agnpy_ec.T_dt.quantity = T_dt
+# agnpy_ec.T_dt.frozen = True
+# agnpy_ec.R_dt.quantity = R_dt
+# agnpy_ec.R_dt.frozen = True
 # - blob parameters
 agnpy_ec.delta_D.quantity  = delta_D
 agnpy_ec.delta_D.frozen    = True
 agnpy_ec.log10_B.quantity = np.log10(B.to_value("G"))
-agnpy_ec.log10_B.frozen   = False
+agnpy_ec.log10_B.frozen   = True
 agnpy_ec.mu_s.quantity = mu_s
 agnpy_ec.mu_s.frozen   = True
 #agnpy_ec.t_var.quantity = t_var
 #agnpy_ec.t_var.frozen   = False
 agnpy_ec.log10_r.quantity = np.log10(r.to_value("cm"))
-agnpy_ec.log10_r.frozen   = False
+agnpy_ec.log10_r.frozen   = True
 agnpy_ec.log10_r_ssd.quantity = np.log10(r_ssd.to_value("cm"))
-agnpy_ec.log10_r_ssd.frozen   = False
+agnpy_ec.log10_r_ssd.frozen   = True
 # - EED
 agnpy_ec.log10_k_e.quantity = -2.1359e+00 
 agnpy_ec.log10_k_e.frozen = False
-agnpy_ec.p1.quantity = 2.0
-agnpy_ec.p2.quantity = 4.1
-agnpy_ec.p1.frozen = False
-agnpy_ec.p2.frozen = False
-agnpy_ec.log10_gamma_b.quantity = np.log10(2490)
-agnpy_ec.log10_gamma_b.frozen = False
-agnpy_ec.log10_gamma_min.quantity = np.log10(120)
+agnpy_ec.p1.quantity =  2.0
+agnpy_ec.p2.quantity =  4.1
+agnpy_ec.p1.frozen = True
+agnpy_ec.p2.frozen = True
+agnpy_ec.log10_gamma_b.quantity = np.log10(2500)     #3.3962e+00  #np.log10(2490)
+agnpy_ec.log10_gamma_b.frozen = True
+agnpy_ec.log10_gamma_min.quantity = np.log10(100)   #2.0792e+00 
 agnpy_ec.log10_gamma_min.frozen = True
-agnpy_ec.log10_gamma_max.quantity = np.log10(6.4e5)
-agnpy_ec.log10_gamma_max.frozen = False
+agnpy_ec.log10_gamma_max.quantity =  np.log10(3.0*10**4)    #5.3802e+00    #np.log10(6.4e5)
+agnpy_ec.log10_gamma_max.frozen = True
+
+# nu          = np.logspace(9, 27, 50) * u.Hz
+# sed_bb_disk = SSDisk.evaluate_multi_T_bb_norm_sed(nu, z, L_disk, M_BH, m_dot, R_in, R_out, d_L)
+
+# print("sed_bb_disk Temperature:", sed_bb_disk)
 
 
 
@@ -498,7 +503,7 @@ print(agnpy_ec.parameters.to_table())
 # plot best-fit model
 flux_points.plot(energy_unit="eV", energy_power=2)
 agnpy_ec.plot(energy_range=[1e-6, 1e15] * u.eV, energy_unit="eV", energy_power=2)
-plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/ex_c/Fit28.png")
+plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/ex_c/Fit40.png")
 plt.show()
 
 #agnpy_ssc.covariance.plot_correlation()
@@ -520,7 +525,7 @@ B = 10 ** agnpy_ec.log10_B.value * u.G
 r = 10 ** agnpy_ec.log10_r.value * u.cm
 r_ssd = 10** agnpy_ec.log10_r_ssd.value * u.cm
 delta_D = agnpy_ec.delta_D.value
-R_b =  5 *10**16 * u.cm
+R_b =  5.0 *10**16 * u.cm
 # blob definition
 parameters = {
     "p1": p1,
@@ -553,24 +558,24 @@ eta    = (L_disk / (m_dot * c ** 2)).to_value("")
 R_in   = agnpy_ec.R_in.value * u.cm
 R_out  = agnpy_ec.R_out.value * u.cm
 disk   = SSDisk(M_BH, L_disk, eta, R_in, R_out)
-dt     = RingDustTorus(L_disk, xi_dt, T_dt, R_dt=R_dt)
+#dt     = RingDustTorus(L_disk, xi_dt, T_dt, R_dt=R_dt)
 #print(disk)
 #print(dt)
 
 # define the radiative processes
 synch       = Synchrotron(blob, ssa=True)
 ssc         = SynchrotronSelfCompton(blob, synch)
-ec_dt       = ExternalCompton(blob, dt, r)
+#ec_dt       = ExternalCompton(blob, dt, r)
 ec_SSD      = ExternalCompton(blob,disk,r_ssd)
 # SEDs
-nu          = np.logspace(9, 27, 50) * u.Hz
+nu          = np.logspace(9, 29, 27) * u.Hz
 synch_sed   = synch.sed_flux(nu)
 ssc_sed     = ssc.sed_flux(nu)
-ec_dt_sed   = ec_dt.sed_flux(nu)
+#ec_dt_sed   = ec_dt.sed_flux(nu)
 disk_bb_sed = disk.sed_flux(nu, z)
 disk_ec_SSD = ec_SSD.sed_flux(nu)
-dt_bb_sed   = dt.sed_flux(nu,z)
-total_sed   = synch_sed + ssc_sed  + dt_bb_sed  + ec_dt_sed +disk_bb_sed + disk_ec_SSD
+#dt_bb_sed   = dt.sed_flux(nu,z)
+total_sed   = synch_sed + ssc_sed  +disk_bb_sed + disk_ec_SSD #  + dt_bb_sed  + ec_dt_sed
 
 
 
@@ -594,14 +599,14 @@ ax.loglog(
     nu / (1 + z), ssc_sed, ls="--", lw=1.3, color="dodgerblue", label="agnpy, SSC"
 )
 
-ax.loglog(
-    nu / (1 + z),
-    ec_dt_sed,
-    ls="--",
-    lw=1.3,
-    color="b",
-    label="EC on DT",
-)
+# ax.loglog(
+#     nu / (1 + z),
+#     ec_dt_sed,
+#     ls="--",
+#     lw=1.3,
+#     color="b",
+#     label="EC on DT",
+# )
 
 ax.loglog(
     nu / (1 + z),
@@ -622,14 +627,14 @@ ax.loglog(
 )
 ###
 
-ax.loglog(
-    nu / (1 + z),
-    dt_bb_sed,
-    ls=":",
-    lw=1.3,
-    color="dimgray",
-    label="DT blackbody",
-)
+# ax.loglog(
+#     nu / (1 + z),
+#     dt_bb_sed,
+#     ls=":",
+#     lw=1.3,
+#     color="dimgray",
+#     label="DT blackbody",
+# )
 # systematics error in gray
 ax.errorbar(
     x.to("Hz", equivalencies=u.spectral()).value,
@@ -658,5 +663,6 @@ ax.set_ylim([10 ** (-20), 10 ** (-5)])
 ax.legend(
     loc="upper center", fontsize=9, ncol=2,
 )
-plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/ex_c/Fit28.1.png")
+plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/ex_c/Fit40.1.png")
 plt.show()
+

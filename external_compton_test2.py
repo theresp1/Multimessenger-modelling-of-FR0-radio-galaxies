@@ -55,52 +55,69 @@ blob.set_gamma_size(500)
 # let us adopt the same disk parameters of Finke 2016
 M_sun = const.M_sun.cgs
 M_BH =  10 ** 4.2202e+01 * u.Unit("g")
+M_BH2=  10 ** 3.7202e+01 * u.Unit("g")
 L_disk = 10**(4.3230e+01) * u.Unit("erg s-1")
+L_disk2= 10**(4.4230e+01) * u.Unit("erg s-1")
 m_dot =2.2698e+23 *u.Unit ("g s-1")
 eta =  (L_disk / (m_dot * c ** 2)).to_value("")
 R_in = 3
+R_in2 = 30
 R_out = 100
-T_dt   = 2.0000e+03 * u.K
-xi_dt  = 5.0000e-01
-R_dt   = 7.2250e+14 * u.cm
+R_out2 = 1000
+#T_dt   = 2.0000e+03 * u.K
+#xi_dt  = 5.0000e-01
+#R_dt   = 7.2250e+14 * u.cm
 r = 10 **1.8699e+01* u.cm
 disk = SSDisk(M_BH, L_disk, eta, R_in, R_out, R_g_units=True)
-dt     = RingDustTorus(L_disk, xi_dt, T_dt, R_dt=R_dt)
+disk2= SSDisk(M_BH2, L_disk, eta, R_in, R_out, R_g_units=True)
+disk3 = SSDisk(M_BH, L_disk2, eta, R_in, R_out, R_g_units=True)
+disk4 = SSDisk(M_BH, L_disk, eta, R_in, R_out2, R_g_units=True)
+disk5 = SSDisk(M_BH, L_disk, eta, R_in2, R_out, R_g_units=True)
+#dt     = RingDustTorus(L_disk, xi_dt, T_dt, R_dt=R_dt)
 
 ec_disk_1 = ExternalCompton(blob, disk, r=1e17 * u.cm)
 ec_disk_2 = ExternalCompton(blob, disk, r=1e18 * u.cm)
 ec_disk_3 = ExternalCompton(blob, disk, r=1e19 * u.cm)
+ec_disk_T = ExternalCompton(blob, disk2, r=1e17 * u.cm)
+ec_disk_L = ExternalCompton(blob, disk3, r=1e17 * u.cm)
+ec_disk_R_out = ExternalCompton(blob, disk4, r=1e17 * u.cm)
 
-print("ec_disk_1 :",ec_disk_1)
+#print("ec_disk_1 :",ec_disk_1)
 
 nu = np.logspace(9, 30, 50) * u.Hz
 
 ec_disk_sed_1 = ec_disk_1.sed_flux(nu)
 ec_disk_sed_2 = ec_disk_2.sed_flux(nu)
 ec_disk_sed_3 = ec_disk_3.sed_flux(nu)
+ec_disk_sed_T = ec_disk_T.sed_flux(nu)
+ec_disk_sed_L = ec_disk_L.sed_flux(nu)
+ec_disk_sed_R_out = ec_disk_R_out.sed_flux(nu)
 disk_bb_sed = disk.sed_flux(nu, z)
 synch       = Synchrotron(blob, ssa=True)
 synch_sed   = synch.sed_flux(nu)
 ssc         = SynchrotronSelfCompton(blob, synch)
 ssc_sed     = ssc.sed_flux(nu)
-ec_dt       = ExternalCompton(blob, dt, r)
-ec_dt_sed   = ec_dt.sed_flux(nu)
-dt_bb_sed   = dt.sed_flux(nu,z)
+#ec_dt       = ExternalCompton(blob, dt, r)
+#ec_dt_sed   = ec_dt.sed_flux(nu)
+#dt_bb_sed   = dt.sed_flux(nu,z)
 disk_bb_sed = disk.sed_flux(nu, z)
 #print("ec_disk_sed_1 :",ec_disk_sed_1)
-sum_sed = ec_disk_sed_1 + synch_sed + ssc_sed +ec_dt_sed +dt_bb_sed + disk_bb_sed
+sum_sed = ec_disk_sed_1 + synch_sed + ssc_sed  + disk_bb_sed # +ec_dt_sed + dt_bb_sed
 #print("sum_Sed: ", sum_sed)
 
 
 plot_sed(nu/(1+z), ec_disk_sed_1, color="maroon", label=r"$r=10^{17}\,{\rm cm}$")
-#plot_sed(nu/(1+z), ec_disk_sed_2, color="crimson", label=r"$r=10^{18}\,{\rm cm}$")
-#plot_sed(nu/(1+z), ec_disk_sed_3, color="dodgerblue", label=r"$r=10^{19}\,{\rm cm}$")
-plot_sed(nu/(1+z), synch_sed, color = "brown", label = "synch")
-plot_sed(nu/(1+z), ssc_sed, color = "r", label = "ssc")
-plot_sed(nu/(1+z), ec_dt_sed, color = "olive", label = "ec on dt")
-plot_sed(nu/(1+z), dt_bb_sed, color = "aqua", label = "BB dt")
-plot_sed(nu/(1+z), disk_bb_sed, color = "gray", label = "BB dt")
-plot_sed(nu/(1+z), sum_sed, color = "black", label = "SUM")
+plot_sed(nu/(1+z), ec_disk_sed_2, color="crimson", label=r"$r=10^{18}\,{\rm cm}$")
+plot_sed(nu/(1+z), ec_disk_sed_3, color="dodgerblue", label=r"$r=10^{19}\,{\rm cm}$")
+plot_sed(nu/(1+z), ec_disk_sed_T, color="pink", label=r"higher T")
+plot_sed(nu/(1+z), ec_disk_sed_L, color="lime", label=r"higher L")
+plot_sed(nu/(1+z), ec_disk_sed_R_out, color="green", label=r"higher R_out")
+#plot_sed(nu/(1+z), synch_sed, color = "brown", label = "synch")
+#plot_sed(nu/(1+z), ssc_sed, color = "r", label = "ssc")
+#plot_sed(nu/(1+z), ec_dt_sed, color = "olive", label = "ec on dt")
+#plot_sed(nu/(1+z), dt_bb_sed, color = "aqua", label = "BB dt")
+#plot_sed(nu/(1+z), disk_bb_sed, color = "gray", label = "BB dt")
+#plot_sed(nu/(1+z), sum_sed, color = "black", label = "SUM")
 # set the same axis limits as in the reference figure
 #plt.xlim([1e18, 1e29])
 plt.ylim([1e-26, 1e-9])
