@@ -259,7 +259,7 @@ class AgnpyEC(SpectralModel):
 # IMPORTANT: add the new custom model to the registry of spectral models recognised by gammapy
 SPECTRAL_MODEL_REGISTRY.append(AgnpyEC)
 
-df_1                = pd.read_csv('new_Tol_values3.csv')
+df_1                = pd.read_csv('input/new_Tol_values3.csv')
 x_v                 = df_1["frequency"].copy()
 y_v                 = df_1["flux"].copy()
 negative_error_bar  = df_1["flux_errn"].copy()
@@ -503,7 +503,7 @@ print(agnpy_ec.parameters.to_table())
 # plot best-fit model
 flux_points.plot(energy_unit="eV", energy_power=2)
 agnpy_ec.plot(energy_range=[1e-6, 1e15] * u.eV, energy_unit="eV", energy_power=2)
-plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/ex_c/Fit40.png")
+plt.savefig("ex_c/Fit40.png")
 plt.show()
 
 #agnpy_ssc.covariance.plot_correlation()
@@ -663,6 +663,6 @@ ax.set_ylim([10 ** (-20), 10 ** (-5)])
 ax.legend(
     loc="upper center", fontsize=9, ncol=2,
 )
-plt.savefig("Multimessenger-modelling-of-FR0-radio-galaxies/ex_c/Fit40.1.png")
+plt.savefig("ex_c/Fit40.1.png")
 plt.show()
 

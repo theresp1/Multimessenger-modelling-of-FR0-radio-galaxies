@@ -43,6 +43,219 @@ from gammapy.modeling.models import PowerLawSpectralModel
 
 
 
+
+# default arrays to be used for integration
+gamma_to_integrate = np.logspace(1, 9, 200)
+nu_to_integrate = np.logspace(5, 30, 200) * u.Hz  # used for SSC
+mu_to_integrate = np.linspace(-1, 1, 100)
+phi_to_integrate = np.linspace(0, 2 * np.pi, 50)
+
+#print("M-sun:", M_sun.cgs)
+
+class AgnpyEC(SpectralModel):
+    """Wrapper of agnpy's synchrotron and SSC classes.
+    The flux model accounts for the Disk and DT's thermal SEDs.
+    A broken power law is assumed for the electron spectrum.
+    To limit the span of the parameters space, we fit the log10 of the parameters
+    whose range is expected to cover several orders of magnitudes (normalisation,
+    gammas, size and magnetic field of the blob).
+    """
+    tag = "EC"
+    log10_k_e = Parameter("log10_k_e", -5, min=-20, max=10)
+    p1 = Parameter("p1", 2.1, min=1.0, max=5.0)
+    p2 = Parameter("p2", 3.1, min=-2.0, max=7.0)
+    log10_gamma_b = Parameter("log10_gamma_b", 3, min=1, max=5)
+    log10_gamma_min = Parameter("log10_gamma_min", 1, min=0, max=4)
+    log10_gamma_max = Parameter("log10_gamma_max", 5, min=4, max=7)
+    # source general parameters
+    z = Parameter("z", 0.1, min=0.01, max=0.1)
+    d_L = Parameter("d_L", "1e27 cm", min=1e25, max=1e33)
+    # emission region parameters
+    delta_D = Parameter("delta_D", 10, min=0, max=10000)
+    log10_B = Parameter("log10_B", -2, min=-3, max=1.0)
+    t_var = Parameter("t_var", "600 s", min=10, max=np.pi * 1e7)
+
+    mu_s = Parameter("mu_s", 0.9, min=0.0, max=1.0)
+    log10_r = Parameter("log10_r", 17.0, min=16.0, max=20.0)
+    # disk parameters
+    log10_L_disk = Parameter("log10_L_disk", 45.0, min=39.0, max=48.0)
+    log10_M_BH = Parameter("log10_M_BH", 42, min=np.log10(0.8e7 * M_sun.cgs.value), max=np.log10(1.2e11 * M_sun.cgs.value))
+    log10_r_ssd = Parameter("log10_r_ssd",17, min= 10.0,max=20.0)
+    ## check if this is cgs or si ((it is si, but do we want it in grams? ))
+    #log10_M_BH = Parameter("log10_M_BH", 42, min=np.log10(0.8e9 * M_sun), max=np.log10(1.2e9 * M_sun))
+
+    m_dot = Parameter("m_dot", "1e26 g s-1", min=1e24, max=1e30)
+    R_in = Parameter("R_in", "1e14 cm", min=1e12, max=1e16)
+    R_out = Parameter("R_out", "1e17 cm", min=1e12, max=1e19)
+    # DT parameters
+    # xi_dt = Parameter("xi_dt", 0.6, min=0.0, max=1.0)
+    # T_dt = Parameter("T_dt", "1e3 K", min=1e2, max=1e9)
+    # R_dt = Parameter("R_dt", "2.5e18 cm", min=1.0e17, max=1.0e19)
+    #BLR parameters 
+    # xi_line = Parameter("xi_line",0.6, min =0.0, max=1.0)
+    # epsilon_line = Parameter("epsilon_line",1e6,min= 1e-6, max = 1e16 )
+    # R_line = Parameter("R_line","1e14 cm", min = 1e4,max = 1e20)
+
+
+    @staticmethod
+    def evaluate(
+        energy,
+        log10_k_e,
+        p1,
+        p2,
+        log10_gamma_b,
+        log10_gamma_min,
+        log10_gamma_max,
+        z,
+        d_L,
+        delta_D,
+        log10_B,
+        #t_var,
+        mu_s,
+        log10_r,
+        log10_r_ssd,
+        log10_L_disk,
+        log10_M_BH,
+        m_dot,
+        R_in,
+        R_out,
+    #    xi_dt,
+    #    T_dt,
+        # R_dt,
+        # xi_line,
+        # epsilon_line,
+        # R_line,
+    ):
+        # conversions
+        k_e = 10 ** log10_k_e * u.Unit("cm-3")
+        gamma_b = 10 ** log10_gamma_b
+        gamma_min = 10 ** log10_gamma_min
+        gamma_max = 10 ** log10_gamma_max
+        B = 10 ** log10_B * u.G
+        R_b =  5*10**16 * u.cm
+        r = 10 ** log10_r * u.cm
+        r_ssd = 10**log10_r_ssd * u.cm
+        L_disk = 10 ** log10_L_disk * u.Unit("erg s-1")
+        M_BH = 10 ** log10_M_BH * u.Unit("g")
+        #eps_dt = 2.7 * (k_B * T_dt / mec2).to_value("")
+
+        nu = energy.to("Hz", equivalencies=u.spectral())
+        # non-thermal components
+        sed_synch = Synchrotron.evaluate_sed_flux(
+            nu,
+            z,
+            d_L,
+            delta_D,
+            B,
+            R_b,
+            BrokenPowerLaw,
+            k_e,
+            p1,
+            p2,
+            gamma_b,
+            gamma_min,
+            gamma_max,
+            ssa = True,
+            gamma=gamma_to_integrate,
+        )
+        sed_ssc = SynchrotronSelfCompton.evaluate_sed_flux(
+            nu,
+            z,
+            d_L,
+            delta_D,
+            B,
+            R_b,
+            BrokenPowerLaw,
+            k_e,
+            p1,
+            p2,
+            gamma_b,
+            gamma_min,
+            gamma_max,
+            ssa =  False,   # dont need this for the SSC
+            gamma=gamma_to_integrate,
+        )
+        # sed_ec_dt = ExternalCompton.evaluate_sed_flux_dt(
+        #     nu,
+        #     z,
+        #     d_L,
+        #     delta_D,
+        #     mu_s,
+        #     R_b,
+        #     L_disk,
+        #     xi_dt,
+        #     eps_dt,
+        #     R_dt,
+        #     r,
+        #     BrokenPowerLaw,
+        #     k_e,
+        #     p1,
+        #     p2,
+        #     gamma_b,
+        #     gamma_min,
+        #     gamma_max,
+        #     gamma=gamma_to_integrate,
+        #)
+        sed_ec_SSDisk = ExternalCompton.evaluate_sed_flux_ss_disk(
+            nu,
+            z,
+            d_L,
+            delta_D,
+            mu_s,
+            R_b,
+            M_BH,
+            L_disk,
+            eta,
+            R_in,
+            R_out,
+            r_ssd,
+            BrokenPowerLaw,
+            k_e,
+            p1,
+            p2,
+            gamma_b,
+            gamma_min,
+            gamma_max,
+            integrator=np.trapz,
+            gamma=gamma_to_integrate,
+            mu_size=100,
+            phi=phi_to_integrate,
+        )
+        # sed_ec_blr = ExternalCompton.evaluate_sed_flux_blr(
+            # nu,
+            # z,
+            # d_L,
+            # delta_D,
+            # mu_s,
+            # R_b,
+            # L_disk,
+            # xi_line,
+            # epsilon_line,
+            # R_line,
+            # r,
+            # BrokenPowerLaw,
+            # k_e,
+            # p1,
+            # p2,
+            # gamma_b,
+            # gamma_min,
+            # gamma_max,
+            # integrator=np.trapz,
+            # gamma=gamma_to_integrate,
+            # mu=mu_to_integrate,
+            # phi=phi_to_integrate,
+
+        #)
+        # thermal components
+        sed_bb_disk = SSDisk.evaluate_multi_T_bb_norm_sed(
+            nu, z, L_disk, M_BH, m_dot, R_in, R_out, d_L
+        )
+        # sed_bb_dt = RingDustTorus.evaluate_bb_norm_sed(
+        #     nu, z, xi_dt * L_disk, T_dt, R_dt, d_L
+        # )
+        sed = sed_synch + sed_ssc + sed_bb_disk + sed_ec_SSDisk #+ sed_ec_dt  #+ sed_ec_blr + sed_bb_dt 
+        return (sed / energy ** 2).to("1 / (cm2 eV s)")
+
 class AgnpySSC(SpectralModel):
     """Wrapper of agnpy's synchrotron and SSC classes.
     A broken power law is assumed for the electron spectrum.
@@ -349,7 +562,7 @@ agnpy_ssc.p1.frozen = True
 agnpy_ssc.p2.frozen = True
 agnpy_ssc.log10_gamma_b.quantity = np.log10(4000)
 agnpy_ssc.log10_gamma_b.frozen = True
-agnpy_ssc.log10_gamma_min.quantity = np.log10(1)
+agnpy_ssc.log10_gamma_min.quantity = np.log10(10)
 agnpy_ssc.log10_gamma_min.frozen = True
 agnpy_ssc.log10_gamma_max.quantity = 4.4912e+00
 agnpy_ssc.log10_gamma_max.frozen = True
