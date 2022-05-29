@@ -82,6 +82,7 @@ ec_disk_T = ExternalCompton(blob, disk2, r=1e17 * u.cm)
 ec_disk_L = ExternalCompton(blob, disk3, r=1e17 * u.cm)
 ec_disk_R_out = ExternalCompton(blob, disk4, r=1e17 * u.cm)
 
+
 #print("ec_disk_1 :",ec_disk_1)
 
 nu = np.logspace(9, 30, 50) * u.Hz
@@ -122,6 +123,13 @@ plot_sed(nu/(1+z), ec_disk_sed_R_out, color="green", label=r"higher R_out")
 #plt.xlim([1e18, 1e29])
 plt.ylim([1e-26, 1e-9])
 plt.show()
+
+
+
+
+
+
+
 
 
 """""

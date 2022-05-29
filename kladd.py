@@ -1,7 +1,8 @@
 import astropy.units as u 
 import astropy
 import numpy as np 
-
+from   astropy.constants import k_B, m_e, c, G, M_sun, sigma_sb
+import matplotlib.pyplot as plt 
 
 ##0.5-7kev Chandra: 
 x_1 = 8.72 * 10**-9 * (2.3 * 10**3 * u.eV).to(u.Hz,equivalencies=u.spectral()) * 10**-(23) * u.Jy
@@ -16,10 +17,82 @@ sum_band_1 = x_1 *2 + x_2 * 2
 
 ##1.2-2keV chandra
 
+L_disk  = 1.2e42 * u.Unit("erg s-1")  # disk luminosity
+eta     = 1 / 12
+m_dot   = (L_disk / (eta * c ** 2)).to("g s-1")  #about 40Msolar
+m_dot2  = 40 * M_sun.cgs *1/u.s
+m_dot3  = 1e30 * u.g *1/u.s
+m_dot4  = 1e28 * u.g *1/u.s
+m_dot5  = 1e24 * u.g *1/u.s
+
+print('m_dot2 :', m_dot2)
+print('m_dot :', m_dot)
+print('test :', 0.5e8 * M_sun)
+print(M_sun)
+M_BH    = 9.942049353490285e+40 * u.g
+R_in    = 22149375570751.87 * u.cm
+R_out   = 2953250076100249.5 * u.cm
+
+print('M_BH = ', M_BH)
+print('R_in =', R_in)
+print('R_out =', R_out)
 
 
-f = np.array([1,2,3])
-print(f)
-p = [0,9,99]
-f = np.append(f,p)
-print(f)
+M_BH2 =  5e8* M_sun.cgs
+R_in2 =  3 * ((G * M_BH2 / c ** 2)).cgs
+#print('R_in2 :', R_in2)
+R_out2 = 400 * ((G * M_BH2 / c ** 2)).cgs
+
+
+M_BH3  =  5e9* M_sun.cgs
+R_in3  =  3 * ((G * M_BH3/ c ** 2)).cgs
+R_out3 =  400 * ((G * M_BH3 / c ** 2)).cgs
+
+
+M_BH4 = 5e6 * M_sun.cgs
+R_in4 = 3 * ((G * M_BH4/ c ** 2)).cgs
+R_out4 = 400 * ((G * M_BH4 / c ** 2)).cgs
+
+print('M_BH4 :', M_BH4)
+
+def evaluate_T(R, M_BH, m_dot, R_in):
+        """black body temperature (K) at the radial coordinate R"""
+        phi = 1 - np.sqrt((R_in / R).to_value(""))
+        val = (3 * G * M_BH * m_dot * phi) / (8 * np.pi * np.power(R, 3) * sigma_sb)
+        return np.power(val, 1 / 4).to("K")
+
+
+R_values = np.logspace(10,40,100)
+R_arr    = np.logspace(np.log10(R_in.value +100),np.log10(R_out.value),100) * u.cm
+R_arr2   = np.logspace(np.log10(R_in2.value +100),np.log10(R_out2.value),100) * u.cm
+R_arr3   = np.logspace(np.log10(R_in3.value +100),np.log10(R_out3.value),100) * u.cm
+R_arr4   = np.logspace(np.log10(R_in4.value +100),np.log10(R_out4.value),100) * u.cm
+
+
+# plt.loglog(R_arr, evaluate_T(R_arr, M_BH, m_dot2, R_in), label =r'M_BH = 5e7 \cdot M_sun ')
+# plt.loglog(R_arr2, evaluate_T(R_arr2, M_BH2, m_dot2, R_in2 ), label =r'M_BH = 5e8 \cdot M_sun ')
+# plt.loglog(R_arr3, evaluate_T(R_arr3, M_BH3, m_dot2, R_in3), label =r'M_BH = 5e9 \cdot M_sun ')
+# plt.loglog(R_arr4, evaluate_T(R_arr4, M_BH4, m_dot2, R_in4), label =r'M_BH = 5e6 \cdot M_sun ')
+
+plt.loglog(R_arr, evaluate_T(R_arr, M_BH, m_dot, R_in), label =r'mdot =  1.6e22')
+plt.loglog(R_arr, evaluate_T(R_arr, M_BH, m_dot2, R_in ), label =r'mdot = 40M_sun/s ')
+plt.loglog(R_arr, evaluate_T(R_arr, M_BH, m_dot3, R_in), label =r'mdot = 1e30 ')
+plt.loglog(R_arr, evaluate_T(R_arr, M_BH, m_dot4, R_in), label =r'mdot = 1e28 ')
+plt.loglog(R_arr, evaluate_T(R_arr, M_BH, m_dot5, R_in), label =r'mdot = 1e24 ')
+
+
+
+
+
+#print(evaluate_T(R_arr, M_BH, m_dot, R_in))
+#print(evaluate_T(R_arr2, M_BH2, m_dot, R_in2 ))
+#print('R_in2: ', R_in2/1e12)
+#print('R-arr2 :', R_arr2)
+#plt.title('R_in = 3Rg, R_out = 400Rg, mdot = 1.6e22 g/s')
+#plt.title('R_in = 3Rg, R_out = 400Rg, mdot = 8e34 g/s')
+plt.title('R_in = 3Rg, R_out = 400Rg, M_BH = 5e7 * M_sun')
+
+plt.xlabel('R')
+plt.ylabel('T')
+plt.legend()
+plt.show()

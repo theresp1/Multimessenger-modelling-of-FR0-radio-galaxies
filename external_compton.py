@@ -1,3 +1,7 @@
+
+import os
+os.system("export PYTHONIOENCODING=utf8")
+
 # import numpy, astropy and matplotlib for basic functionalities
 from math import gamma
 import pkg_resources
@@ -8,9 +12,8 @@ from   astropy.constants import c
 from   astropy.table import Table
 from   astropy.coordinates import Distance
 import matplotlib.pyplot as plt
-from   astropy.constants import k_B, m_e, c, G, M_sun
+from   astropy.constants import k_B, m_e, c, G, M_sun, sigma_sb
 import astropy.constants as const
-
 
 # import agnpy classes
 from agnpy.spectra import BrokenPowerLaw
@@ -503,8 +506,8 @@ print(agnpy_ec.parameters.to_table())
 # plot best-fit model
 flux_points.plot(energy_unit="eV", energy_power=2)
 agnpy_ec.plot(energy_range=[1e-6, 1e15] * u.eV, energy_unit="eV", energy_power=2)
-plt.savefig("ex_c/Fit40.png")
-plt.show()
+#plt.savefig("ex_c/Fit40.png")
+#plt.show()
 
 #agnpy_ssc.covariance.plot_correlation()
 #plt.savefig("output_scan_B/Fit13_correlation.png")
@@ -523,7 +526,7 @@ gamma_min = 10 ** agnpy_ec.log10_gamma_min.value
 gamma_max = 10 ** agnpy_ec.log10_gamma_max.value
 B = 10 ** agnpy_ec.log10_B.value * u.G
 r = 10 ** agnpy_ec.log10_r.value * u.cm
-r_ssd = 10** agnpy_ec.log10_r_ssd.value * u.cm
+r_ssd = 10** agnpy_ec.log10_r_ssd.value * u.cm    ##distance between the disk and the blob
 delta_D = agnpy_ec.delta_D.value
 R_b =  5.0 *10**16 * u.cm
 # blob definition
@@ -663,6 +666,54 @@ ax.set_ylim([10 ** (-20), 10 ** (-5)])
 ax.legend(
     loc="upper center", fontsize=9, ncol=2,
 )
-plt.savefig("ex_c/Fit40.1.png")
-plt.show()
+#plt.savefig("ex_c/Fit40.1.png")
+#plt.show()
 
+M_BH   = 10 ** agnpy_ec.log10_M_BH.value * u.Unit("g")
+R_in   = agnpy_ec.R_in.value * u.cm
+R_out  = agnpy_ec.R_out.value * u.cm
+
+print('M_BH = ', M_BH)
+print('R_in =', R_in)
+print('R_out =', R_out)
+
+
+M_BH2 =  5e8* M_sun
+R_in2 =  3 * (G * M_BH2 / c ** 2)
+R_out2 = 400 * (G * M_BH2 / c ** 2)
+
+def evaluate_T(R, M_BH, m_dot, R_in):
+        """black body temperature (K) at the radial coordinate R"""
+        phi = 1 - np.sqrt((R_in / R).to_value(""))
+        val = (3 * G * M_BH * m_dot * phi) / (8 * np.pi * np.power(R, 3) * sigma_sb)
+        return np.power(val, 1 / 4).to("K")
+
+
+
+R_values = np.logspace(10,40,100)
+R_arr    = np.logspace(np.log10(R_in.value +100),np.log10(R_out.value),100) * u.cm
+R_arr2   = np.logspace(np.log10(R_in2.value +100),np.log10(R_out2.value),100) * u.cm
+
+#plt.loglog(R_values, evaluate_T(R_arr, M_BH, m_dot, R_in), label =r'M_BH = 0.5e8 \cdot M_sun ')
+plt.loglog(R_values, evaluate_T(R_arr2, M_BH2, m_dot, R_in2 ), label =r'M_BH = 5e8 \cdot M_sun ')
+#plt.loglog(R_values, evaluate_T(R_arr, 5e9* M_sun, m_dot, R_in), label =r'M_BH = 5e9 \cdot M_sun ')
+
+plt.xlabel('R')
+plt.ylabel('T')
+plt.legend()
+plt.show()
+'''''
+for i in range(3, 401): 
+    n = i *((G * M_BH) / c ** 2)
+    Temp[i]= SSDisk.T(disk1,n)
+
+print("Temp: ",Temp)
+#print("ec_disk_1 :",ec_disk_1)
+
+nu = np.logspace(9, 30, 50) * u.Hz
+
+ec_disk_sed_1 = ec_disk_1.sed_flux(nu)
+
+plot_sed(nu/(1+z), ec_disk_sed_1, color="maroon", label=r"")
+plt.show()
+'''''

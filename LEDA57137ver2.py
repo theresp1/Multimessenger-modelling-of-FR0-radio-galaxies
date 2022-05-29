@@ -1,3 +1,6 @@
+import os
+os.system("export PYTHONIOENCODING=utf8")
+
 # import numpy, astropy and matplotlib for basic functionalities
 from pickle import TRUE
 import pkg_resources
@@ -22,7 +25,8 @@ from   astropy.constants import k_B, m_e, c, G, M_sun
 from agnpy.spectra import BrokenPowerLaw
 from agnpy.emission_regions import Blob
 from agnpy.synchrotron import Synchrotron
-from agnpy.compton import SynchrotronSelfCompton
+from agnpy.compton import SynchrotronSelfCompton, ExternalCompton
+from agnpy.targets import SSDisk, RingDustTorus
 from agnpy.utils.plot import load_mpl_rc, sed_x_label, sed_y_label
 
 # import gammapy classes
@@ -92,9 +96,15 @@ class AgnpyEC(SpectralModel):
     # T_dt = Parameter("T_dt", "1e3 K", min=1e2, max=1e9)
     # R_dt = Parameter("R_dt", "2.5e18 cm", min=1.0e17, max=1.0e19)
     #BLR parameters 
-    # xi_line = Parameter("xi_line",0.6, min =0.0, max=1.0)
-    # epsilon_line = Parameter("epsilon_line",1e6,min= 1e-6, max = 1e16 )
-    # R_line = Parameter("R_line","1e14 cm", min = 1e4,max = 1e20)
+    xi_line = Parameter("xi_line",0.6, min =0.0, max=1.0)
+    epsilon_line = Parameter("epsilon_line",1e6,min= 1e-6, max = 1e16 )
+    R_line = Parameter("R_line","1e14 cm", min = 1e4,max = 1e20)
+
+    def __init__(self, file):
+        data = read(file)
+        self.param1 = data("param1")
+        self.param2 = data("param2")
+        self.param3 = data("param3")
 
 
     @staticmethod
@@ -110,7 +120,7 @@ class AgnpyEC(SpectralModel):
         d_L,
         delta_D,
         log10_B,
-        #t_var,
+        t_var,
         mu_s,
         log10_r,
         log10_r_ssd,
@@ -122,9 +132,9 @@ class AgnpyEC(SpectralModel):
     #    xi_dt,
     #    T_dt,
         # R_dt,
-        # xi_line,
-        # epsilon_line,
-        # R_line,
+         xi_line,
+         epsilon_line,
+         R_line,
     ):
         # conversions
         k_e = 10 ** log10_k_e * u.Unit("cm-3")
@@ -132,7 +142,7 @@ class AgnpyEC(SpectralModel):
         gamma_min = 10 ** log10_gamma_min
         gamma_max = 10 ** log10_gamma_max
         B = 10 ** log10_B * u.G
-        R_b =  5*10**16 * u.cm
+        R_b =  (c * t_var * delta_D / (1 + z)).to("cm")
         r = 10 ** log10_r * u.cm
         r_ssd = 10**log10_r_ssd * u.cm
         L_disk = 10 ** log10_L_disk * u.Unit("erg s-1")
@@ -221,98 +231,18 @@ class AgnpyEC(SpectralModel):
             mu_size=100,
             phi=phi_to_integrate,
         )
-        # sed_ec_blr = ExternalCompton.evaluate_sed_flux_blr(
-            # nu,
-            # z,
-            # d_L,
-            # delta_D,
-            # mu_s,
-            # R_b,
-            # L_disk,
-            # xi_line,
-            # epsilon_line,
-            # R_line,
-            # r,
-            # BrokenPowerLaw,
-            # k_e,
-            # p1,
-            # p2,
-            # gamma_b,
-            # gamma_min,
-            # gamma_max,
-            # integrator=np.trapz,
-            # gamma=gamma_to_integrate,
-            # mu=mu_to_integrate,
-            # phi=phi_to_integrate,
-
-        #)
-        # thermal components
-        sed_bb_disk = SSDisk.evaluate_multi_T_bb_norm_sed(
-            nu, z, L_disk, M_BH, m_dot, R_in, R_out, d_L
-        )
-        # sed_bb_dt = RingDustTorus.evaluate_bb_norm_sed(
-        #     nu, z, xi_dt * L_disk, T_dt, R_dt, d_L
-        # )
-        sed = sed_synch + sed_ssc + sed_bb_disk + sed_ec_SSDisk #+ sed_ec_dt  #+ sed_ec_blr + sed_bb_dt 
-        return (sed / energy ** 2).to("1 / (cm2 eV s)")
-
-class AgnpySSC(SpectralModel):
-    """Wrapper of agnpy's synchrotron and SSC classes.
-    A broken power law is assumed for the electron spectrum.
-    To limit the span of the parameters space, we fit the log10 of the parameters
-    whose range is expected to cover several orders of magnitudes (normalisation,
-    gammas, size and magnetic field of the blob).
-    """
-
-    tag = "SSC"
-    log10_k_e = Parameter("log10_k_e", -5, min=-20, max=10)
-    p1 = Parameter("p1", 2.1, min=1.0, max=5.0)
-    p2 = Parameter("p2", 3.1, min=-2.0, max=7.0)
-    log10_gamma_b = Parameter("log10_gamma_b", 3, min=1, max=5)
-    log10_gamma_min = Parameter("log10_gamma_min", 1, min=0, max=4)
-    log10_gamma_max = Parameter("log10_gamma_max", 5, min=4, max=7)
-    # source general parameters
-    z = Parameter("z", 0.1, min=0.01, max=0.1)
-    d_L = Parameter("d_L", "1e27 cm", min=1e25, max=1e33)
-    # emission region parameters
-    delta_D = Parameter("delta_D", 10, min=0, max=10000)
-    log10_B = Parameter("log10_B", -2, min=-3, max=1.0)
-    t_var = Parameter("t_var", "600 s", min=10, max=np.pi * 1e7)
-    ######
-    #gamma = Parameter("Gamma", 2 ,min=1, max = 10 )
-
-    @staticmethod
-    def evaluate(
-        energy,
-        log10_k_e,
-        p1,
-        p2,
-        log10_gamma_b,
-        log10_gamma_min,
-        log10_gamma_max,
-        z,
-        d_L,
-        delta_D,
-        log10_B,
-        t_var,
-        #gamma,
-    ):
-        # conversions
-        k_e = 10 ** log10_k_e * u.Unit("cm-3")
-        gamma_b = 10 ** log10_gamma_b
-        gamma_min = 10 ** log10_gamma_min
-        gamma_max = 10 ** log10_gamma_max
-        B = 10 ** log10_B * u.G
-        R_b = (c * t_var * delta_D / (1 + z)).to("cm")
-
-        nu = energy.to("Hz", equivalencies=u.spectral())
-        sed_synch = Synchrotron.evaluate_sed_flux(
+        sed_ec_blr = ExternalCompton.evaluate_sed_flux_blr(
             nu,
             z,
             d_L,
             delta_D,
-            B,
+            mu_s,
             R_b,
+            L_disk,
+            xi_line,
+            epsilon_line,
+            R_line,
+            r,
             BrokenPowerLaw,
             k_e,
             p1,
@@ -320,28 +250,23 @@ class AgnpySSC(SpectralModel):
             gamma_b,
             gamma_min,
             gamma_max,
-            #gamma,
-            ssa = True
+            integrator=np.trapz,
+            gamma=gamma_to_integrate,
+            mu=mu_to_integrate,
+            phi=phi_to_integrate,
+
         )
-        sed_ssc = SynchrotronSelfCompton.evaluate_sed_flux(
-           nu,
-           z,
-           d_L,
-           delta_D,
-           B,
-           R_b,
-           BrokenPowerLaw,
-           k_e,
-           p1,
-           p2,
-           gamma_b,
-           gamma_min,
-           gamma_max,
-           #gamma,
-           ssa =  False   # dont need this for the SSC
-       )
-        sed = sed_synch + sed_ssc
+        # thermal components
+        sed_bb_disk = SSDisk.evaluate_multi_T_bb_norm_sed(
+            nu, z, L_disk, M_BH, m_dot, R_in, R_out, d_L
+        )
+        # sed_bb_dt = RingDustTorus.evaluate_bb_norm_sed(
+        #     nu, z, xi_dt * L_disk, T_dt, R_dt, d_L
+        # )
+        sed = sed_synch + sed_ssc + sed_bb_disk + sed_ec_SSDisk + sed_ec_blr#+ sed_ec_dt  # + sed_bb_dt 
         return (sed / energy ** 2).to("1 / (cm2 eV s)")
+
+
 
 
 #Global variables 
@@ -532,44 +457,103 @@ v_s = 7.93 *10**13
 Radius = 5 *10**16 * u.cm
 
 # declare a model 
-agnpy_ssc = AgnpySSC()
+agnpy_ec = AgnpyEC()
 # initialise parameters
 d_L = Distance(z=z).to("cm")
 # - AGN parameters
-agnpy_ssc.z.quantity = z
-agnpy_ssc.z.frozen = True
-agnpy_ssc.d_L.quantity = d_L
-agnpy_ssc.d_L.frozen = True
+agnpy_ec.z.quantity = z
+agnpy_ec.z.frozen = True
+agnpy_ec.d_L.quantity = d_L
+agnpy_ec.d_L.frozen = True
 # - blob parameters
-agnpy_ssc.delta_D.quantity = 2.6
-agnpy_ssc.delta_D.frozen = True
-agnpy_ssc.log10_B.quantity =  np.log10(0.2)  
+Gamma   =  1.05
+delta_D = 2.6
+agnpy_ec.delta_D.quantity = delta_D
+Beta    = np.sqrt(1 - 1 / np.power(Gamma, 2))  # jet relativistic speed
+mu_s    =  (1 - 1 / (Gamma * delta_D)) / Beta  # viewing angle
+agnpy_ec.delta_D.frozen = True
+agnpy_ec.log10_B.quantity =  np.log10(0.2)  
 #agnpy_ssc.log10_B.quantity = np.log10( 1/(6.6466) * (1+z) * (v_s**2)/(2.8*10**6* v_c)  )
-agnpy_ssc.log10_B.frozen = True
+agnpy_ec.log10_B.frozen = True
 #agnpy_ssc.t_var. quantity = 1 * u.d
 #agnpy_ssc.t_var.quantity = (Radius * (1+z))/(c.cgs *2) 
-agnpy_ssc.t_var.quantity = 9.5710e+06 
+agnpy_ec.t_var.quantity = 9.5710e+06 
 #agnpy_ssc.t_var.quantity = 4.8970e+06
-agnpy_ssc.t_var.frozen = False
+agnpy_ec.t_var.frozen = False
 #agnpy_ssc.gamma.quantity = 2
 #agnpy_ssc.gamma.frozen = True
 # - EED
-agnpy_ssc.log10_k_e.quantity = -2.3682e+00  
-agnpy_ssc.log10_k_e.frozen = False
-agnpy_ssc.p1.quantity = 1.9
-agnpy_ssc.p2.quantity = 3.5
-agnpy_ssc.p1.frozen = True
-agnpy_ssc.p2.frozen = True
-agnpy_ssc.log10_gamma_b.quantity = np.log10(4000)
-agnpy_ssc.log10_gamma_b.frozen = True
-agnpy_ssc.log10_gamma_min.quantity = np.log10(10)
-agnpy_ssc.log10_gamma_min.frozen = True
-agnpy_ssc.log10_gamma_max.quantity = 4.4912e+00
-agnpy_ssc.log10_gamma_max.frozen = True
+agnpy_ec.log10_k_e.quantity = -2.3682e+00  
+agnpy_ec.log10_k_e.frozen = False
+agnpy_ec.p1.quantity = 1.9
+agnpy_ec.p2.quantity = 3.5
+agnpy_ec.p1.frozen = True
+agnpy_ec.p2.frozen = True
+agnpy_ec.log10_gamma_b.quantity = np.log10(4000)
+agnpy_ec.log10_gamma_b.frozen = True
+agnpy_ec.log10_gamma_min.quantity = np.log10(10)
+agnpy_ec.log10_gamma_min.frozen = True
+agnpy_ec.log10_gamma_max.quantity = 4.4912e+00
+agnpy_ec.log10_gamma_max.frozen = True
 
+# disk
+L_disk  = 1.2e42 * u.Unit("erg s-1")  # disk luminosity
+M_BH    = 0.5e8 * M_sun   #1e8-1e9 range leave it free 
+eta     = 1 / 12
+m_dot   = (L_disk / (eta * c ** 2)).to("g s-1") #about 40Msolar
+R_g     = ((G * M_BH) / c ** 2).to("cm")
+R_in    = 3 * R_g
+R_out   = 400 * R_g #too much with 1000?  
+# DT
+# xi_dt   = 0.5  # fraction of disk luminosity reprocessed by the DT
+# T_dt    = 0.5e3 * u.K # 500-2000K range   or 10**4 -10**9 range? 
+# R_dt    = 2.5 * 10**18 * (L_disk/(10**45 * u.Unit("erg s-1")))**2  *u.cm  #6.47 * 1e18 * u.cm
+#print("R_dt:", R_dt)
+# BLR10_k_e.frozen = False
+agnpy_ec.p1.quantity = 1.9      #fraction of the disk radiation reprocessed by the BLR
+epsilon_line = 1e6                 #dimensionless energy of the emitted line
+R_line       = 1e14                #radius of the BLR spherical shell
+
+# -- SS disk
+agnpy_ec.log10_L_disk.quantity = np.log10(L_disk.to_value("erg s-1"))
+agnpy_ec.log10_L_disk.frozen   = True
+agnpy_ec.log10_M_BH.quantity = np.log10(M_BH.to_value("g"))
+agnpy_ec.log10_M_BH.frozen   = True
+agnpy_ec.m_dot.quantity = m_dot
+agnpy_ec.m_dot.frozen    = True
+agnpy_ec.R_in.quantity = R_in
+agnpy_ec.R_in.frozen   = True
+agnpy_ec.R_out.quantity = R_out
+agnpy_ec.R_out.frozen   = True
+# -- Dust Torus
+# agnpy_ec.xi_dt.quantity = xi_dt
+# agnpy_ec.xi_dt.frozen   = True
+# agnpy_ec.T_dt.quantity = T_dt
+# agnpy_ec.T_dt.frozen = True
+# agnpy_ec.R_dt.quantity = R_dt
+# agnpy_ec.R_dt.frozen = True
+# - blob parameters
+
+
+# size and location of the emission region
+#t_var   = 7.9062e+05 * u.s
+r       = 5e17 * u.cm
+r_ssd   = 2e15 * u.cm
+
+
+agnpy_ec.delta_D.frozen    = True
+agnpy_ec.log10_B.frozen   = True
+agnpy_ec.mu_s.quantity = mu_s
+agnpy_ec.mu_s.frozen   = True
+#agnpy_ec.t_var.quantity = t_var
+#agnpy_ec.t_var.frozen   = False
+agnpy_ec.log10_r.quantity = np.log10(r.to_value("cm"))
+agnpy_ec.log10_r.frozen   = True
+agnpy_ec.log10_r_ssd.quantity = np.log10(r_ssd.to_value("cm"))
+agnpy_ec.log10_r_ssd.frozen   = True
 
 # define model
-model = SkyModel(name="LEDA57137", spectral_model=agnpy_ssc)
+model = SkyModel(name="LEDA57137", spectral_model=agnpy_ec)
 dataset_ssc = FluxPointsDataset(model, flux_points)
 print("dataset", dataset_ssc)
 # do not use frequency point below 1e11 Hz, affected by non-blazar emission
@@ -581,25 +565,16 @@ dataset_ssc.mask_fit = dataset_ssc.data.energy_ref > E_min_fit
 fitter = Fit([dataset_ssc])
 results = fitter.run(optimize_opts={"print_level": 1})
 print(results)
-print(agnpy_ssc.parameters.to_table())
+print(agnpy_ec.parameters.to_table())
 # plot best-fit model
 flux_points.plot(energy_unit="eV", energy_power=2)
-agnpy_ssc.plot(energy_range=[1e-6, 1e15] * u.eV, energy_unit="eV", energy_power=2)
+agnpy_ec.plot(energy_range=[1e-6, 1e15] * u.eV, energy_unit="eV", energy_power=2)
 plt.ylim(1e-20,1e-8)
 #plt.savefig("FU2_FIT7/Fit8.png")
 plt.show()
 
 #agnpy_ssc.covariance.plot_correlation()
 #plt.savefig("FU2_FIT1/Base_correlation.png")
-
-
-# Plotting Paliya data
-#plt.scatter(x1_p,y1_p, color = "darkmagenta",s =5, label ="Paliya data")
-#plt.scatter(x2_p,y2_p, color = "darkmagenta",s =5)
-#plt.scatter(x3_p,y3_p, color = "darkmagenta",s =5)
-#plt.scatter(xu_p,yu_p, color = "darkmagenta",s =5) 
-#plt.errorbar(x_p,y_p, yerr = yerror_p, xerr = xerror_p, c ="darkmagenta" )
-
 
 
 ## Dust Torus (DT)
