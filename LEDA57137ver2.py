@@ -100,11 +100,11 @@ class AgnpyEC(SpectralModel):
     epsilon_line = Parameter("epsilon_line",1e6,min= 1e-6, max = 1e16 )
     R_line = Parameter("R_line","1e14 cm", min = 1e4,max = 1e20)
 
-    def __init__(self, file):
-        data = read(file)
-        self.param1 = data("param1")
-        self.param2 = data("param2")
-        self.param3 = data("param3")
+ #   def __init__(self, file):
+ #       data = read(file)
+ #       self.param1 = data("param1")
+ #       self.param2 = data("param2")
+ #       self.param3 = data("param3")
 
 
     @staticmethod
