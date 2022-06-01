@@ -40,6 +40,15 @@ from gammapy.modeling import Fit
 import pandas as pd
 from astropy.table import QTable
 from gammapy.modeling.models import PowerLawSpectralModel
+from   astropy.constants import k_B, m_e, c, G, M_sun
+
+
+# import agnpy classes
+from agnpy.spectra import BrokenPowerLaw
+from agnpy.emission_regions import Blob
+from agnpy.synchrotron import Synchrotron
+from agnpy.compton import SynchrotronSelfCompton, ExternalCompton
+from agnpy.targets import SSDisk, RingDustTorus
 
 
 
@@ -403,46 +412,70 @@ R_line     = 1e17 * u.cm                                             ##set by ey
 L_disk_blr = 9e45 * u.erg/(u.s)                                      ##set by eye (for now)
 R_blr      = 1e17 * u.cm * (L_disk/(10e45 * u.erg/(u.s)) )**0.5
 
-#blr_LEDA57137 = SphericalShellBLR(L_disk_blr, xi_line, "LEDA57137", R_blr)
-
 
 # x-axis 
-x_energy       = np.logspace(-1,25,N)*u.eV
-x_energy_gamma = np.logspace(9,11,N) *u.eV
-x_energy_x     = np.logspace(1,9)    *u.eV
-x_energy_IR    = np.logspace(-5,0,N) *u.eV
+
 nu             = np.logspace(8, 25)  *u.Hz
 
 ## PLOTTING
-# Data from SED
-#plt.errorbar(frequency_array,Nufnu_array, yerr = Nufnu_array, c ="red", fmt="o" )
-#plt.scatter(frequency_array,Nufnu_array, c ="red", s =2)
-
-# Plot of the Dust Torus
-dt_bb_sed = dt.sed_flux(nu, z)
-#plot_sed(nu, dt_bb_sed, lw=2, label="Dust Torus")
-
-
-# Plot of the BLR 
-#blr_bb_sed_LEDA57137 = blr_LEDA57137.sed_flux(nu,z)
-#plot_sed(nu,blr_bb_sed_LEDA57137, lw= 2, label= "BLR")
-
-# Plotting the Paliya data
-#plt.errorbar(x_p,y_p, yerr = yerror_p, xerr = xerror_p, c ="darkmagenta", fmt= "o", linestyle= "")
-
-
-# plt.ylim(10**(-20),10**(-8))
-# plt.ylabel(r"$log(E^{2} \frac{dN}{dE})$ $(erg cm^{-2} s^{-1})$ ")
-# plt.xlabel(r"$eV $ (Hz)")
-# plt.xscale('log')
-# plt.yscale('log')
-# plt.legend(fontsize = "small",loc = 4)
-# plt.title("LEDA 57137, z=0.03690, T=4467K")
-# plt.savefig("output/LEDA_57137.png")
-# plt.show()
-
-# plt.show()
 
 
 
+k_e = 10 ** agnpy_ssc.log10_k_e.value * u.Unit("cm-3")
+p1 = agnpy_ssc.p1.value
+p2 = agnpy_ssc.p2.value
+gamma_b = 10 ** agnpy_ssc.log10_gamma_b.value
+print("gamma_b :", gamma_b)
+gamma_min = 10 ** agnpy_ssc.log10_gamma_min.value
+gamma_max = 10 ** agnpy_ssc.log10_gamma_max.value
+B = 10 ** agnpy_ssc.log10_B.value * u.G
+delta_D = agnpy_ssc.delta_D.value
+R_b =  (c * agnpy_ssc.t_var.value * u.s * agnpy_ssc.delta_D.value / (1 + agnpy_ssc.z.value)).to("cm")
+print("R_b", R_b)
+
+
+sed_synch = Synchrotron.evaluate_sed_flux(
+    nu,
+    agnpy_ssc.z,
+    d_L,
+    delta_D,
+    B,
+    R_b,
+    BrokenPowerLaw,
+    k_e,
+    p1,
+    p2,
+    gamma_b,
+    gamma_min,
+    gamma_max,
+    #gamma,
+    ssa = True
+
+)
+
+
+sed_ssc = SynchrotronSelfCompton.evaluate_sed_flux(
+    nu,
+    z,
+    d_L,
+    delta_D,
+    B,
+    R_b,
+    BrokenPowerLaw,
+    k_e,
+    p1,
+    p2,
+    gamma_b,
+    gamma_min,
+    gamma_max,
+    #gamma,
+    ssa =  False   # dont need this for the SSC
+)
+        #sed = sed_synch + sed_ssc
+        ##return (sed / energy ** 2).to("1 / (cm2 eV s)")
+
+
+plot_sed(nu/(1+z), sed_synch, color="maroon", label=r"synch")
+plot_sed(nu/(1+z), sed_ssc, color="maroon", label=r"ssc")
+plt.show()
 

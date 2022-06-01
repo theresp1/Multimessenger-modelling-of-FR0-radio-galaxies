@@ -80,7 +80,6 @@ class AgnpyEC(SpectralModel):
     t_var = Parameter("t_var", "600 s", min=10, max=np.pi * 1e7)
 
     mu_s = Parameter("mu_s", 0.9, min=0.0, max=1.0)
-    log10_r = Parameter("log10_r", 17.0, min=16.0, max=20.0)
     # disk parameters
     log10_L_disk = Parameter("log10_L_disk", 45.0, min=39.0, max=48.0)
     log10_M_BH = Parameter("log10_M_BH", 42, min=np.log10(0.8e7 * M_sun.cgs.value), max=np.log10(1.2e11 * M_sun.cgs.value))
@@ -95,10 +94,12 @@ class AgnpyEC(SpectralModel):
     # xi_dt = Parameter("xi_dt", 0.6, min=0.0, max=1.0)
     # T_dt = Parameter("T_dt", "1e3 K", min=1e2, max=1e9)
     # R_dt = Parameter("R_dt", "2.5e18 cm", min=1.0e17, max=1.0e19)
+    # log10_r_dt = Parameter("log10_r_dt",17, min= 10.0,max=20.0) 
     #BLR parameters 
     xi_line = Parameter("xi_line",0.6, min =0.0, max=1.0)
     epsilon_line = Parameter("epsilon_line",1e6,min= 1e-6, max = 1e16 )
     R_line = Parameter("R_line","1e14 cm", min = 1e4,max = 1e20)
+    log10_r_blr = Parameter("log10_r_blr", 17.0, min=16.0, max=20.0)
 
  #   def __init__(self, file):
  #       data = read(file)
@@ -122,7 +123,7 @@ class AgnpyEC(SpectralModel):
         log10_B,
         t_var,
         mu_s,
-        log10_r,
+        log10_r_blr,
         log10_r_ssd,
         log10_L_disk,
         log10_M_BH,
@@ -132,6 +133,7 @@ class AgnpyEC(SpectralModel):
     #    xi_dt,
     #    T_dt,
         # R_dt,
+        #log10_r_dt
          xi_line,
          epsilon_line,
          R_line,
@@ -143,11 +145,12 @@ class AgnpyEC(SpectralModel):
         gamma_max = 10 ** log10_gamma_max
         B = 10 ** log10_B * u.G
         R_b =  (c * t_var * delta_D / (1 + z)).to("cm")
-        r = 10 ** log10_r * u.cm
+        r_blr = 10 ** log10_r_blr * u.cm
         r_ssd = 10**log10_r_ssd * u.cm
         L_disk = 10 ** log10_L_disk * u.Unit("erg s-1")
         M_BH = 10 ** log10_M_BH * u.Unit("g")
         #eps_dt = 2.7 * (k_B * T_dt / mec2).to_value("")
+        #r_dt = 10 ** log10_r_dt * u.cm
 
         nu = energy.to("Hz", equivalencies=u.spectral())
         # non-thermal components
@@ -196,7 +199,7 @@ class AgnpyEC(SpectralModel):
         #     xi_dt,
         #     eps_dt,
         #     R_dt,
-        #     r,
+        #     r_dt,
         #     BrokenPowerLaw,
         #     k_e,
         #     p1,
@@ -242,7 +245,7 @@ class AgnpyEC(SpectralModel):
             xi_line,
             epsilon_line,
             R_line,
-            r,
+            r_blr,
             BrokenPowerLaw,
             k_e,
             p1,
@@ -512,7 +515,7 @@ R_out   = 400 * R_g #too much with 1000?
 # BLR10_k_e.frozen = False
 agnpy_ec.p1.quantity = 1.9      #fraction of the disk radiation reprocessed by the BLR
 epsilon_line = 1e6                 #dimensionless energy of the emitted line
-R_line       = 1e14                #radius of the BLR spherical shell
+R_line       = 1e14     *u.cm           #radius of the BLR spherical shell
 
 # -- SS disk
 agnpy_ec.log10_L_disk.quantity = np.log10(L_disk.to_value("erg s-1"))
@@ -537,7 +540,7 @@ agnpy_ec.R_out.frozen   = True
 
 # size and location of the emission region
 #t_var   = 7.9062e+05 * u.s
-r       = 5e17 * u.cm
+r_blr   = 5e17 * u.cm
 r_ssd   = 2e15 * u.cm
 
 
@@ -547,8 +550,8 @@ agnpy_ec.mu_s.quantity = mu_s
 agnpy_ec.mu_s.frozen   = True
 #agnpy_ec.t_var.quantity = t_var
 #agnpy_ec.t_var.frozen   = False
-agnpy_ec.log10_r.quantity = np.log10(r.to_value("cm"))
-agnpy_ec.log10_r.frozen   = True
+agnpy_ec.log10_r_blr.quantity = np.log10(r_blr.to_value("cm"))
+agnpy_ec.log10_r_blr.frozen   = True
 agnpy_ec.log10_r_ssd.quantity = np.log10(r_ssd.to_value("cm"))
 agnpy_ec.log10_r_ssd.frozen   = True
 
@@ -584,14 +587,6 @@ xi_dt  = 0.1
 L_disk = 2e46 * u.erg /(u.s)
 dt     = RingDustTorus(L_disk, xi_dt, T_dt)
 
-## Blue line region (BLR) 
-# quantities defining the BLR
-xi_line    = 0.1
-R_line     = 1e17 * u.cm                                             ##set by eye (for now)
-L_disk_blr = 9e45 * u.erg/(u.s)                                      ##set by eye (for now)
-R_blr      = 1e17 * u.cm * (L_disk/(10e45 * u.erg/(u.s)) )**0.5
-
-#blr_LEDA57137 = SphericalShellBLR(L_disk_blr, xi_line, "LEDA57137", R_blr)
 
 
 # x-axis 
@@ -611,9 +606,6 @@ dt_bb_sed = dt.sed_flux(nu, z)
 #plot_sed(nu, dt_bb_sed, lw=2, label="Dust Torus")
 
 
-# Plot of the BLR 
-#blr_bb_sed_LEDA57137 = blr_LEDA57137.sed_flux(nu,z)
-#plot_sed(nu,blr_bb_sed_LEDA57137, lw= 2, label= "BLR")
 
 # Plotting the Paliya data
 #plt.errorbar(x_p,y_p, yerr = yerror_p, xerr = xerror_p, c ="darkmagenta", fmt= "o", linestyle= "")
@@ -633,4 +625,194 @@ dt_bb_sed = dt.sed_flux(nu, z)
 
 
 
+## PLotting each specific component 
 
+# define the emission region and the thermal emitters
+k_e = 10 ** agnpy_ec.log10_k_e.value * u.Unit("cm-3")
+p1 = agnpy_ec.p1.value
+p2 = agnpy_ec.p2.value
+gamma_b = 10 ** agnpy_ec.log10_gamma_b.value
+gamma_min = 10 ** agnpy_ec.log10_gamma_min.value
+gamma_max = 10 ** agnpy_ec.log10_gamma_max.value
+B = 10 ** agnpy_ec.log10_B.value * u.G
+r_blr = 10 ** agnpy_ec.log10_r_blr.value * u.cm
+r_ssd = 10** agnpy_ec.log10_r_ssd.value * u.cm    ##distance between the disk and the blob
+delta_D = agnpy_ec.delta_D.value
+R_b =  5.0 *10**16 * u.cm
+# blob definition
+parameters = {
+    "p1": p1,
+    "p2": p2,
+    "gamma_b": gamma_b,
+    "gamma_min": gamma_min,
+    "gamma_max": gamma_max,
+}
+spectrum_dict = {"type": "BrokenPowerLaw", "parameters": parameters}
+blob = Blob(
+    R_b,
+    z,
+    delta_D,
+    Gamma,
+    B,
+    k_e,
+    spectrum_dict,
+    spectrum_norm_type="differential",
+    gamma_size=500,
+)
+print(blob)
+#print(f"jet power in particles: {blob.P_jet_e:.2e}")
+#print(f"jet power in B: {blob.P_jet_B:.2e}")
+
+# Disk and DT definition
+L_disk = 10 ** agnpy_ec.log10_L_disk.value * u.Unit("erg s-1")
+M_BH   = 10 ** agnpy_ec.log10_M_BH.value * u.Unit("g")
+m_dot  = agnpy_ec.m_dot.value * u.Unit("g s-1")
+eta    = (L_disk / (m_dot * c ** 2)).to_value("")
+R_in   = agnpy_ec.R_in.value * u.cm
+R_out  = agnpy_ec.R_out.value * u.cm
+disk   = SSDisk(M_BH, L_disk, eta, R_in, R_out)
+#dt     = RingDustTorus(L_disk, xi_dt, T_dt, R_dt=R_dt)
+#print(disk)
+#print(dt)
+
+## BLR
+
+
+
+
+## Blue line region (BLR) 
+# quantities defining the BLR
+xi_line    = agnpy_ec.xi_line
+R_line     = agnpy_ec.R_line * u.cm                                             ##set by eye (for now)
+L_disk     = 10 ** (agnpy_ec.log10_L_disk)  * u.Unit("erg s-1")                                  ##set by eye (for now)
+r_blr      = 10 **(agnpy_ec.log10_r_blr) * u.cm
+
+blr_LEDA57137 = SphericalShellBLR(L_disk, xi_line, "Lyalpha", R_line)
+
+
+
+# define the radiative processes
+synch       = Synchrotron(blob, ssa=True)
+ssc         = SynchrotronSelfCompton(blob, synch)
+#ec_dt       = ExternalCompton(blob, dt, r)
+ec_SSD      = ExternalCompton(blob,disk,r_ssd)
+ec_blr     = ExternalCompton(blob,blr_LEDA57137,r_blr)
+# SEDs
+nu          = np.logspace(9, 29, 27) * u.Hz
+synch_sed   = synch.sed_flux(nu)
+ssc_sed     = ssc.sed_flux(nu)
+#ec_dt_sed   = ec_dt.sed_flux(nu)
+disk_bb_sed = disk.sed_flux(nu, z)
+disk_ec_SSD = ec_SSD.sed_flux(nu)
+#dt_bb_sed   = dt.sed_flux(nu,z)
+blr_bb_sed = blr_LEDA57137.sed_flux(nu,z)
+total_sed   = synch_sed + ssc_sed  +disk_bb_sed + disk_ec_SSD + blr_bb_sed + ec_blr #  + dt_bb_sed  + ec_dt_sed
+
+# Plot of the BLR 
+#blr_bb_sed_LEDA57137 = blr_LEDA57137.sed_flux(nu,z)
+#plot_sed(nu,blr_bb_sed_LEDA57137, lw= 2, label= "BLR")
+
+# plot everything
+#load_mpl_rc()
+#plt.rcParams["text.usetex"] = True
+fig, ax = plt.subplots()
+
+ax.loglog(
+    nu / (1 + z), total_sed, ls="-", lw=2.1, color="crimson", label="agnpy, total"
+)
+ax.loglog(
+    nu / (1 + z),
+    synch_sed,
+    ls="--",
+    lw=1.3,
+    color="orange",
+    label="Synchrotron",
+)
+ax.loglog(
+    nu / (1 + z), ssc_sed, ls="--", lw=1.3, color="dodgerblue", label="agnpy, SSC"
+)
+
+# ax.loglog(
+#     nu / (1 + z),
+#     ec_dt_sed,
+#     ls="--",
+#     lw=1.3,
+#     color="b",
+#     label="EC on DT",
+# )
+
+ax.loglog(
+    nu / (1 + z),
+    disk_bb_sed,
+    ls="-.",
+    lw=1.3,
+    color="dimgray",
+    label="Disk blackbody",
+)
+
+ax.loglog(
+    nu / (1 + z),
+    ec_blr,
+    ls="-.",
+    lw=1.3,
+    color="dimgray",
+    label="Disk blackbody",
+)
+
+ax.loglog(
+    nu / (1 + z),
+    blr_bb_sed,
+    ls="-.",
+    lw=1.3,
+    color="dimgray",
+    label="BLR",
+)
+###
+ax.loglog(
+    nu / (1 + z),
+    disk_ec_SSD,
+    ls="-.",
+    lw=1.3,
+    color="seagreen",
+    label="EC on SSD",
+)
+###
+
+# ax.loglog(
+#     nu / (1 + z),
+#     dt_bb_sed,
+#     ls=":",
+#     lw=1.3,
+#     color="dimgray",
+#     label="DT blackbody",
+# )
+# systematics error in gray
+ax.errorbar(
+    x.to("Hz", equivalencies=u.spectral()).value,
+    y,
+    yerr=y_err_syst,
+    marker=",",
+    ls="",
+    color="gray",
+    label="",
+)
+# statistics error in black
+ax.errorbar(
+    x.to("Hz", equivalencies=u.spectral()).value,
+    y,
+    yerr=y_err_stat,
+    marker=".",
+    ls="",
+    color="k",
+    label="Data points",
+)
+
+ax.set_xlabel(sed_x_label)
+ax.set_ylabel(sed_y_label)
+ax.set_xlim([1e3, 1e29])
+ax.set_ylim([10 ** (-20), 10 ** (-5)])
+ax.legend(
+    loc="upper center", fontsize=9, ncol=2,
+)
+#plt.savefig("ex_c/Fit40.1.png")
+#plt.show()

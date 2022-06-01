@@ -1,1 +1,6 @@
-print("hei nils <3") 
+import pandas as pd
+import ast
+import numpy as np
+
+
+

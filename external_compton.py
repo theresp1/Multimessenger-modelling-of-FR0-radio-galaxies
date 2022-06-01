@@ -669,6 +669,7 @@ ax.legend(
 #plt.savefig("ex_c/Fit40.1.png")
 #plt.show()
 
+
 M_BH   = 10 ** agnpy_ec.log10_M_BH.value * u.Unit("g")
 R_in   = agnpy_ec.R_in.value * u.cm
 R_out  = agnpy_ec.R_out.value * u.cm
