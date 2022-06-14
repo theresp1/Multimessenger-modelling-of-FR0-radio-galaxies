@@ -682,10 +682,10 @@ disk   = SSDisk(M_BH, L_disk, eta, R_in, R_out)
 
 ## Blue line region (BLR) 
 # quantities defining the BLR
-xi_line    = agnpy_ec.xi_line
-R_line     = agnpy_ec.R_line * u.cm                                             ##set by eye (for now)
-L_disk     = 10 ** (agnpy_ec.log10_L_disk)  * u.Unit("erg s-1")                                  ##set by eye (for now)
-r_blr      = 10 **(agnpy_ec.log10_r_blr) * u.cm
+xi_line    = agnpy_ec.xi_line.value
+R_line     = agnpy_ec.R_line.value * u.cm                                             ##set by eye (for now)
+L_disk     = 10 ** (agnpy_ec.log10_L_disk.value)  * u.Unit("erg s-1")                                  ##set by eye (for now)
+r_blr      = 10 **(agnpy_ec.log10_r_blr.value) * u.cm
 
 blr_LEDA57137 = SphericalShellBLR(L_disk, xi_line, "Lyalpha", R_line)
 

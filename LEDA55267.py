@@ -143,54 +143,51 @@ class AgnpySSC(SpectralModel):
 #Global variables 
 N  = 10**2
 E0 = 25 * u.GeV
-z  = 0.03690
+z  = 0.03254
 
+#Paliya data:   ##TODO: Put this into an imput file
+# x1 = 2.038   Gev    y1 = 1.7220*10**(-13)  
+# x2 = 8.5076  Gev    y2 = 1.2658*10**(-13)
+# x3 = 35.433  Gev    y3 = 1.4145*10**(-13)
+# xu = 146.51  Gev    yu = 3.3463*10**(-13)  #Upper limit
+#x1_error = [0.9970,4.1465]         y1_error = [1.1233*10**(-13),2.2345*10**(-13)]
+#x2_error = [4.1966, 17.271]        y2_error = [6.4178*10**(-14),1.8868*10**(-13)]
+#x3_error = [17.4540,72.592]        y3_error = [2.7652*10**(-14),2.5383*10**(-13)]
+#xu_error = [72.627,295.350]        yu_error = [1.7931*10**(-13),0]
 
-
-#Paliya data:   #TODO: put this into an imput file
-# x1 = 2.0404  Gev    y1 = 1.9311*10**(-13)
-# x2 = 8.5002  Gev    y2 = 1.5858*10**(-12)
-# x3 = 35.464  Gev    y3 = 1.7022*10**(-12)
-# xu = 146.39  Gev    yu = 3.4801*10**(-13)  #Upper limit 
-#x1_error = [0.9962, 4.1452]        y1_error = [1.2601*10**(-13), 2.6*10**(-13)]
-#x2_error = [4.2008, 17.246]        y2_error = [8.9629*10**(-14), 2.2758*10**(-13) ]
-#x3_error = [17.477, 72.639]        y3_error = [4.3775*10**(-14), 2.9673*10**(-13) ] 
-#xu_error = [72.626, 295.56]        yu_error = [1.8544*10**(-13), 0 ] 
-
-x1_p = ( 2.0402* u.GeV).to(u.Hz, equivalencies=u.spectral()).value
-x2_p = ( 8.5100* u.GeV).to(u.Hz, equivalencies=u.spectral()).value
-x3_p = ( 35.454* u.GeV).to(u.Hz, equivalencies=u.spectral()).value
+x1_p = ( 2.038 * u.GeV).to(u.Hz, equivalencies=u.spectral()).value
+x2_p = ( 8.5076* u.GeV).to(u.Hz, equivalencies=u.spectral()).value
+x3_p = ( 35.433* u.GeV).to(u.Hz, equivalencies=u.spectral()).value
 xu_p = (146.51 * u.GeV).to(u.Hz, equivalencies=u.spectral()).value
 
 x_p = np.array([x1_p,x2_p,x3_p,xu_p])
 
-y1_p = 1.9311*10**(-13)
-y2_p = 1.5858*10**(-13)
-y3_p = 1.7022*10**(-13)
-yu_p = 3.4801*10**(-13)
+y1_p = 1.7220*10**(-13)
+y2_p = 1.2658*10**(-13)
+y3_p = 1.4145*10**(-13)
+yu_p = 3.3463*10**(-13)
 
 y_p = np.array([y1_p,y2_p,y3_p,yu_p])
 
-
-#####x1_p = (2.0412 * u.GeV).to(u.eV, equivalencies=u.spectral()).value
-
-x1_lower_error = (0.9962 * u.GeV).to(u.eV, equivalencies=u.spectral()).value
-x2_lower_error = (4.2008 * u.GeV).to(u.eV, equivalencies=u.spectral()).value
-x3_lower_error = (17.477 * u.GeV).to(u.eV, equivalencies=u.spectral()).value
-xu_lower_error = (72.626 * u.GeV).to(u.eV, equivalencies=u.spectral()).value
-x1_upper_error = (4.1452 * u.GeV).to(u.eV, equivalencies=u.spectral()).value
-x2_upper_error = (17.246 * u.GeV).to(u.eV, equivalencies=u.spectral()).value
-x3_upper_error = (72.639 * u.GeV).to(u.eV, equivalencies=u.spectral()).value
-xu_upper_error = (295.56 * u.GeV).to(u.eV, equivalencies=u.spectral()).value
+x1_lower_error = (0.997  * u.GeV).to(u.Hz, equivalencies=u.spectral()).value
+x2_lower_error = (4.1966 * u.GeV).to(u.Hz, equivalencies=u.spectral()).value
+x3_lower_error = (17.454 * u.GeV).to(u.Hz, equivalencies=u.spectral()).value
+xu_lower_error = (72.627 * u.GeV).to(u.Hz, equivalencies=u.spectral()).value
+x1_upper_error = (4.1465 * u.GeV).to(u.Hz, equivalencies=u.spectral()).value
+x2_upper_error = (17.271 * u.GeV).to(u.Hz, equivalencies=u.spectral()).value
+x3_upper_error = (72.592 * u.GeV).to(u.Hz, equivalencies=u.spectral()).value
+xu_upper_error = (295.35 * u.GeV).to(u.Hz, equivalencies=u.spectral()).value
 
 #errorbars for the Paliya data
-x_error_min_p = np.array([x1_p - x1_lower_error,  x2_p - x2_lower_error , x3_p -x3_lower_error, xu_p -xu_lower_error])
-x_error_max_p = np.array([x1_upper_error - x1_p , x2_upper_error - x2_p  , x3_upper_error - x3_p, xu_upper_error - xu_p])
-y_error_min_p = np.array([y1_p - 1.2601*10**(-13), y2_p -8.9629*10**(-14),y3_p - 4.3775*10**(-14), yu_p - 1.8544*10**(-13)] )
-y_error_max_p = np.array([2.6*10**(-13) - y1_p, 2.2758*10**(-13) - y2_p,2.9673*10**(-13)-y3_p,0] )
+x_error_min_p = np.array([ x1_p - x1_lower_error,  x2_p - x2_lower_error , x3_p -x3_lower_error, xu_p -xu_lower_error])
+x_error_max_p = np.array([ x1_upper_error - x1_p , x2_upper_error - x2_p  , x3_upper_error - x3_p, xu_upper_error - xu_p])
+y_error_min_p = np.array([ y1_p - 1.1233*10**(-13), y2_p - 6.4178*10**(-14),y3_p - 2.7652*10**(-14), yu_p - 1.7931*10**(-13)] )
+y_error_max_p = np.array([2.2345*10**(-13)- y1_p, 1.8868*10**(-13) - y2_p, 2.5383*10**(-13)-y3_p,0] )
 
 xerror_p = [x_error_min_p,x_error_max_p]
 yerror_p = [y_error_min_p, y_error_max_p]
+
+
 
 def _is_interesting_line(line_str: str) -> bool:
     return line and line_str[0].isspace()
@@ -204,7 +201,7 @@ rest        = []
 
 
 ## Read the data 
-with open('input/LEDA57137.txt') as f:
+with open('input/LEDA55267.txt') as f:
     while True:
         line = f.readline()
         if not line:
@@ -382,41 +379,11 @@ print(agnpy_ssc.parameters.to_table())
 flux_points.plot(energy_unit="eV", energy_power=2)
 agnpy_ssc.plot(energy_range=[1e-6, 1e15] * u.eV, energy_unit="eV", energy_power=2)
 plt.ylim(1e-20,1e-8)
-plt.savefig("LEDAoutput/LEDA57137_fit1.png")
+plt.savefig("LEDAoutput/LEDA55267_fit1.png")
 
 plt.show()
 
-#agnpy_ssc.covariance.plot_correlation()
-#plt.savefig("FU2_FIT1/Base_correlation.png")
 
-
-# Plotting Paliya data
-#plt.scatter(x1_p,y1_p, color = "darkmagenta",s =5, label ="Paliya data")
-#plt.scatter(x2_p,y2_p, color = "darkmagenta",s =5)
-#plt.scatter(x3_p,y3_p, color = "darkmagenta",s =5)
-#plt.scatter(xu_p,yu_p, color = "darkmagenta",s =5) 
-#plt.errorbar(x_p,y_p, yerr = yerror_p, xerr = xerror_p, c ="darkmagenta" )
-
-
-
-## Dust Torus (DT)
-## Quantities defining the DT
-T_dt   = 5e3 * u.K
-xi_dt  = 0.1
-L_disk = 2e46 * u.erg /(u.s)
-dt     = RingDustTorus(L_disk, xi_dt, T_dt)
-
-## Blue line region (BLR) 
-# quantities defining the BLR
-xi_line    = 0.1
-R_line     = 1e17 * u.cm                                             ##set by eye (for now)
-L_disk_blr = 9e45 * u.erg/(u.s)                                      ##set by eye (for now)
-R_blr      = 1e17 * u.cm * (L_disk/(10e45 * u.erg/(u.s)) )**0.5
-
-
-# x-axis 
-
-nu             = np.logspace(8, 25)  *u.Hz
 
 ## PLOTTING
 
