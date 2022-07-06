@@ -76,13 +76,16 @@ class AgnpySSC(SpectralModel):
     t_var = Parameter("t_var", "600 s", min=10, max=np.pi * 1e7)
     ######
     #gamma = Parameter("Gamma", 2 ,min=1, max = 10 )
-    ##DT
-    m_dot = Parameter("m_dot", "1e26 g s-1", min=1e18, max=1e30)
-    R_in = Parameter("R_in", "1e14 cm", min=1e12, max=1e16)
-    R_out = Parameter("R_out", "1e17 cm", min=1e12, max=1e19)
+    ##SSd
+    #m_dot = Parameter("m_dot", "1e26 g s-1", min=1e18, max=1e30)
+    #R_in = Parameter("R_in", "1e14 cm", min=1e12, max=1e16)
+    #R_out = Parameter("R_out", "1e17 cm", min=1e12, max=1e19)
     log10_L_disk = Parameter("log10_L_disk", 45.0, min=39.0, max=48.0)
-    log10_M_BH = Parameter("log10_M_BH", 42, min=np.log10(0.8e7 * M_sun.cgs.value), max=np.log10(1.2e11 * M_sun.cgs.value))
-    
+    #log10_M_BH = Parameter("log10_M_BH", 42, min=np.log10(0.8e7 * M_sun.cgs.value), max=np.log10(1.2e11 * M_sun.cgs.value))
+    ## DT
+    xi_dt = Parameter("xi_dt", 0.5, min = 0.0, max = 1.0 )
+    T_dt  = Parameter("T_dt", "1e3 K", min = 1e2, max = 1e6 )
+    R_dt  = Parameter("R_dt", "2.5e18 cm", min = 1.0e15, max = 1.0e20)
 
     @staticmethod
     def evaluate(
@@ -98,12 +101,15 @@ class AgnpySSC(SpectralModel):
         delta_D,
         log10_B,
         t_var,
-        R_in,
-        R_out,
+    #    R_in,
+    #    R_out,
         log10_L_disk,
-        log10_M_BH,
-        m_dot,
+    #    log10_M_BH,
+    #    m_dot,
         #gamma,
+        xi_dt,
+        T_dt,
+        R_dt
     ):
         # conversions
         k_e = 10 ** log10_k_e * u.Unit("cm-3")
@@ -113,7 +119,7 @@ class AgnpySSC(SpectralModel):
         B = 10 ** log10_B * u.G
         R_b = (c * t_var * delta_D / (1 + z)).to("cm")
         L_disk = 10 ** log10_L_disk * u.Unit("erg s-1")
-        M_BH = 10 ** log10_M_BH * u.Unit("g")
+    #    M_BH = 10 ** log10_M_BH * u.Unit("g")
 
         nu = energy.to("Hz", equivalencies=u.spectral())
         sed_synch = Synchrotron.evaluate_sed_flux(
@@ -152,8 +158,8 @@ class AgnpySSC(SpectralModel):
        )
        #thermal components
 
-        sed_bb_dt = SSDisk.evaluate_multi_T_bb_norm_sed(
-            nu,z,L_disk,M_BH,m_dot,R_in,R_out,d_L
+        sed_bb_dt = RingDustTorus.evaluate_bb_norm_sed(
+            nu,z,xi_dt * L_disk,T_dt,R_dt, d_L
 
         )
 
@@ -317,42 +323,56 @@ agnpy_ssc.log10_B.quantity =  np.log10(0.2)
 agnpy_ssc.log10_B.frozen = True
 #agnpy_ssc.t_var. quantity = 1 * u.d
 #agnpy_ssc.t_var.quantity = (Radius * (1+z))/(c.cgs *2) 
-agnpy_ssc.t_var.quantity = 9.5710e+06 
+agnpy_ssc.t_var.quantity = 5.0331e+05
 #agnpy_ssc.t_var.quantity = 4.8970e+06
-agnpy_ssc.t_var.frozen = False
+agnpy_ssc.t_var.frozen = True
 #agnpy_ssc.gamma.quantity = 2
 #agnpy_ssc.gamma.frozen = True
 # - EED
 agnpy_ssc.log10_k_e.quantity = -2.3682e+00  
 agnpy_ssc.log10_k_e.frozen = False
-agnpy_ssc.p1.quantity = 1.9
+agnpy_ssc.p1.quantity = 2.0
 agnpy_ssc.p2.quantity = 3.7
 agnpy_ssc.p1.frozen = True
 agnpy_ssc.p2.frozen = True
-agnpy_ssc.log10_gamma_b.quantity = np.log10(4000)
+agnpy_ssc.log10_gamma_b.quantity = np.log10(800)
 agnpy_ssc.log10_gamma_b.frozen = True
 agnpy_ssc.log10_gamma_min.quantity = np.log10(1)
 agnpy_ssc.log10_gamma_min.frozen = True
 agnpy_ssc.log10_gamma_max.quantity = 4.4912e+00
 agnpy_ssc.log10_gamma_max.frozen = True
-# DT 
+# - DT 
 L_disk  = 1e45 * u.Unit("erg s-1")  # disk luminosity
-M_BH    = 0.5e8 * M_sun   #1e8-1e9 range leave it free 
-eta     = 1 / 12
-m_dot   = 1e19 * u.Unit("g s-1")     #L_disk / (eta * c ** 2)).to("g s-1") #about 40Msolar
-R_g     = ((G * M_BH) / c ** 2).to("cm")
-R_in    = 3 * R_g
-R_out   = 400 * R_g #too much with 1000?  
+xi_dt = 0.5  # fraction of disk luminosity reprocessed by the DT
+T_dt  = 5e3 * u.K
+R_dt  = 6.47 * 1e18 * u.cm
 agnpy_ssc.log10_L_disk.quantity = np.log10(L_disk.to_value("erg s-1"))
 agnpy_ssc.log10_L_disk.frozen   = True
-agnpy_ssc.log10_M_BH.quantity = np.log10(M_BH.to_value("g"))
-agnpy_ssc.log10_M_BH.frozen   = True
-agnpy_ssc.m_dot.quantity = m_dot
-agnpy_ssc.m_dot.frozen    = True
-agnpy_ssc.R_in.quantity = R_in
-agnpy_ssc.R_in.frozen   = True
-agnpy_ssc.R_out.quantity = R_out
-agnpy_ssc.R_out.frozen   = True
+agnpy_ssc.xi_dt.quantity = xi_dt
+agnpy_ssc.xi_dt.frozen = True
+agnpy_ssc.T_dt.quantity = T_dt
+agnpy_ssc.T_dt.frozen = True
+agnpy_ssc.R_dt.quantity = R_dt
+agnpy_ssc.R_dt.frozen = True
+
+# SSD
+# L_disk  = 1e45 * u.Unit("erg s-1")  # disk luminosity
+# M_BH    = 0.5e8 * M_sun   #1e8-1e9 range leave it free 
+# eta     = 1 / 12
+# m_dot   = 1e19 * u.Unit("g s-1")     #L_disk / (eta * c ** 2)).to("g s-1") #about 40Msolar
+# R_g     = ((G * M_BH) / c ** 2).to("cm")
+# R_in    = 3 * R_g
+# R_out   = 400 * R_g #too much with 1000?  
+# agnpy_ssc.log10_L_disk.quantity = np.log10(L_disk.to_value("erg s-1"))
+# agnpy_ssc.log10_L_disk.frozen   = True
+# agnpy_ssc.log10_M_BH.quantity = np.log10(M_BH.to_value("g"))
+# agnpy_ssc.log10_M_BH.frozen   = True
+# agnpy_ssc.m_dot.quantity = m_dot
+# agnpy_ssc.m_dot.frozen    = True
+# agnpy_ssc.R_in.quantity = R_in
+# agnpy_ssc.R_in.frozen   = True
+# agnpy_ssc.R_out.quantity = R_out
+# agnpy_ssc.R_out.frozen   = True
 # define model
 model = SkyModel(name="LEDA57137", spectral_model=agnpy_ssc)
 dataset_ssc = FluxPointsDataset(model, flux_points)
@@ -371,12 +391,10 @@ print(agnpy_ssc.parameters.to_table())
 flux_points.plot(energy_unit="eV", energy_power=2)
 agnpy_ssc.plot(energy_range=[1e-6, 1e15] * u.eV, energy_unit="eV", energy_power=2)
 plt.ylim(1e-20,1e-8)
-plt.savefig("LEDAoutput/LEDA31768_fit1.png")
+plt.savefig("LEDAoutput/LEDA31768_fit2_ver5.png")
 plt.show()
 
-
-
-## PLotting each specific component 
+#plot each component individually 
 
 # define the emission region and the thermal emitters
 k_e = 10 ** agnpy_ssc.log10_k_e.value * u.Unit("cm-3")
@@ -388,14 +406,10 @@ gamma_max = 10 ** agnpy_ssc.log10_gamma_max.value
 B = 10 ** agnpy_ssc.log10_B.value * u.G
 Gamma = 1.05
 #r = 10 ** agnpy_ssc.log10_r.value * u.cm
-#r_ssd = 10** agnpy_ssc.log10_r_ssd.value * u.cm    ##distance between the disk and the blob
 delta_D = agnpy_ssc.delta_D.value
 R_b = (
     c * agnpy_ssc.t_var.quantity * agnpy_ssc.delta_D.quantity / (1 + agnpy_ssc.z.quantity)
 ).to("cm")
-
-
-
 # blob definition
 parameters = {
     "p1": p1,
@@ -416,44 +430,41 @@ blob = Blob(
     spectrum_norm_type="differential",
     gamma_size=500,
 )
-print(blob)
+#print(blob)
 #print(f"jet power in particles: {blob.P_jet_e:.2e}")
 #print(f"jet power in B: {blob.P_jet_B:.2e}")
 
 # Disk and DT definition
-L_disk = 10 ** agnpy_ssc.log10_L_disk.value * u.Unit("erg s-1")
-M_BH   = 10 ** agnpy_ssc.log10_M_BH.value * u.Unit("g")
-m_dot  = agnpy_ssc.m_dot.value * u.Unit("g s-1")
-eta    = (L_disk / (m_dot * c ** 2)).to_value("")
-R_in   = agnpy_ssc.R_in.value  * u.cm
-R_out  = agnpy_ssc.R_out.value * u.cm
-disk   = SSDisk(M_BH, L_disk, eta, R_in, R_out)
-#dt     = RingDustTorus(L_disk, xi_dt, T_dt, R_dt=R_dt)
+L_disk = 10 ** (agnpy_ssc.log10_L_disk.value) * u.Unit("erg s-1")
+#M_BH = 10 ** agnpy_ssc.log10_M_BH.value * u.Unit("g")
+#m_dot = agnpy_ssc.m_dot.value * u.Unit("g s-1")
+#eta = (L_disk / (m_dot * c ** 2)).to_value("")
+xi_dt = agnpy_ssc.xi_dt.value
+T_dt = agnpy_ssc.T_dt.value * u.K
+R_dt = agnpy_ssc.R_dt.value * u.cm
+#R_in = agnpy_ssc.R_in.value * u.cm
+#R_out = agnpy_ssc.R_out.value * u.cm
+#disk = SSDisk(M_BH, L_disk, eta, R_in, R_out)
+dt = RingDustTorus(L_disk, xi_dt, T_dt, R_dt=R_dt)
 #print(disk)
 #print(dt)
-
 # define the radiative processes
-synch       = Synchrotron(blob, ssa=True)
-ssc         = SynchrotronSelfCompton(blob, synch)
-#ec_dt       = ExternalCompton(blob, dt, r)
-#ec_SSD      = ExternalCompton(blob,disk,r_ssd)
+synch = Synchrotron(blob, ssa=True)
+ssc = SynchrotronSelfCompton(blob, synch)
+#ec_dt = ExternalCompton(blob, dt, r)
 # SEDs
-nu          = np.logspace(7, 29, 50) * u.Hz
-synch_sed   = synch.sed_flux(nu)
-ssc_sed     = ssc.sed_flux(nu)
-#ec_dt_sed   = ec_dt.sed_flux(nu)
-disk_bb_sed = disk.sed_flux(nu, z)
-#disk_ec_SSD = ec_SSD.sed_flux(nu)
-#dt_bb_sed   = dt.sed_flux(nu,z)
-total_sed   = synch_sed + ssc_sed   +disk_bb_sed  #+ disk_ec_SSD #  + dt_bb_sed  + ec_dt_sed
-
-
+nu = np.logspace(9, 27, 200) * u.Hz
+synch_sed = synch.sed_flux(nu)
+ssc_sed = ssc.sed_flux(nu)
+#ec_dt_sed = ec_dt.sed_flux(nu)
+#disk_bb_sed = disk.sed_flux(nu, z)
+dt_bb_sed = dt.sed_flux(nu, z)
+total_sed = synch_sed + ssc_sed  + dt_bb_sed #+ ec_dt_sed + disk_bb_sed
 
 # plot everything
-#load_mpl_rc()
+load_mpl_rc()
 #plt.rcParams["text.usetex"] = True
 fig, ax = plt.subplots()
-
 ax.loglog(
     nu / (1 + z), total_sed, ls="-", lw=2.1, color="crimson", label="agnpy, total"
 )
@@ -462,49 +473,36 @@ ax.loglog(
     synch_sed,
     ls="--",
     lw=1.3,
-    color="orange",
-    label="Synchrotron",
+    color="goldenrod",
+    label="agnpy, synchrotron",
 )
 ax.loglog(
     nu / (1 + z), ssc_sed, ls="--", lw=1.3, color="dodgerblue", label="agnpy, SSC"
 )
-
 # ax.loglog(
 #     nu / (1 + z),
 #     ec_dt_sed,
 #     ls="--",
 #     lw=1.3,
-#     color="b",
-#     label="EC on DT",
+#     color="lightseagreen",
+#     label="agnpy, EC on DT",
 # )
-
-ax.loglog(
-    nu / (1 + z),
-    disk_bb_sed,
-    ls="-.",
-    lw=1.3,
-    color="dimgray",
-    label="Disk blackbody",
-)
-# ###
 # ax.loglog(
 #     nu / (1 + z),
-#     disk_ec_SSD,
+#     disk_bb_sed,
 #     ls="-.",
 #     lw=1.3,
-#     color="seagreen",
-#     label="EC on SSD",
-# )
-# ###
-
-# ax.loglog(
-#     nu / (1 + z),
-#     dt_bb_sed,
-#     ls=":",
-#     lw=1.3,
 #     color="dimgray",
-#     label="DT blackbody",
+#     label="agnpy, disk blackbody",
 # )
+ax.loglog(
+    nu / (1 + z),
+    dt_bb_sed,
+    ls=":",
+    lw=1.3,
+    color="dimgray",
+    label="agnpy, DT blackbody",
+)
 # systematics error in gray
 ax.errorbar(
     x.to("Hz", equivalencies=u.spectral()).value,
@@ -523,15 +521,14 @@ ax.errorbar(
     marker=".",
     ls="",
     color="k",
-    label="Data points",
+    label="data",
 )
-
 ax.set_xlabel(sed_x_label)
 ax.set_ylabel(sed_y_label)
-ax.set_xlim([1e3, 1e29])
-ax.set_ylim([10 ** (-20), 10 ** (-5)])
+ax.set_xlim([1e6, 1e29])
+ax.set_ylim([10 ** (-25), 10 ** (-7)])
 ax.legend(
     loc="upper center", fontsize=9, ncol=2,
 )
-plt.savefig("LEDAoutput/LEDA31768_fit1.2.png")
+plt.savefig("LEDAoutput/LEDA31768_fit2.2_ver5.png")
 plt.show()
