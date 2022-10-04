@@ -122,7 +122,7 @@ class AgnpySSC(SpectralModel):
         sed = sed_synch + sed_ssc
         return (sed / energy ** 2).to("1 / (cm2 eV s)")
 
-df_1                = pd.read_csv('input/new_Tol_values3.csv')
+df_1                = pd.read_csv('new_Tol_values3.csv')
 x_v                 = df_1["frequency"].copy()
 y_v                 = df_1["flux"].copy()
 negative_error_bar  = df_1["flux_errn"].copy()

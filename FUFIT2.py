@@ -122,7 +122,7 @@ class AgnpySSC(SpectralModel):
         sed = sed_synch + sed_ssc
         return (sed / energy ** 2).to("1 / (cm2 eV s)")
 
-df_1                = pd.read_csv('input/new_Tol_values3.csv')
+df_1                = pd.read_csv('new_Tol_values3.csv')
 x_v                 = df_1["frequency"].copy()
 y_v                 = df_1["flux"].copy()
 negative_error_bar  = df_1["flux_errn"].copy()
@@ -170,7 +170,7 @@ table["e2dnde_errp"]  = p_e_b * u.erg/( u.s * u.cm *u.cm)
 table["e_min"]        = e_min_values * u.TeV
 table["e_max"]        = e_max_values * u.TeV
 table["e2dnde_ul"]    = upper_limit_array * u.erg/( u.s * u.cm *u.cm)
-table["is_ul"]        = [True,True,True,True,True,False,False,False,False,False,False,False,False,False,True,False]
+table["is_ul"]        = [False,False,False,False,False,False,False,False,False,False,False,False,False,False,True,False]
 
 
 
@@ -198,7 +198,7 @@ flux_points = FluxPoints(table)
 # - 5% on lower-energy instruments
 x = flux_points.table["e_ref"]
 y = flux_points.table["e2dnde"]
-y_err_stat = flux_points.table["e2dnde_err"]
+y_err_stat = (flux_points.table["e2dnde_errn"] +  flux_points.table["e2dnde_errp"])/2
 y_err_syst = np.zeros(len(x))
 # define energy ranges
 e_vhe = 100 * u.GeV
@@ -283,7 +283,7 @@ print(agnpy_ssc.parameters.to_table())
 # plot best-fit model
 flux_points.plot(energy_unit="eV", energy_power=2)
 agnpy_ssc.plot(energy_range=[1e-6, 1e15] * u.eV, energy_unit="eV", energy_power=2)
-plt.savefig("FU2_FIT7/Fit8.png")
+#plt.savefig("FU2_FIT7/Fit8.png")
 #plt.show()
 
 #agnpy_ssc.covariance.plot_correlation()
